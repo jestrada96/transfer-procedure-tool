@@ -2,6 +2,9 @@ from classes.node import Node
 from classes.valve2 import Valve2
 from classes.valve3 import Valve3
 
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget
+
 # fix connections list max count and back connections checker later, 
 # for now focus on functionality and assume connections will be accurate and logical
 
@@ -18,7 +21,7 @@ valve804 = Valve3("APVP-WTL-V-804")
 valve805 = Valve3("APVP-WTL-V-805")
 valve801 = Valve3("APVP-WTL-V-801")
 valve610 = Valve3("APVP-WTL-V-808")
-valve603 = Valve3("APVP-WTL-V-603")
+valve603 = Valve2("APVP-WTL-V-603")
 valve601 = Valve3("APVP-WTL-V-601")
 valve602 = Valve3("APVP-WTL-V-602")
 valve606 = Valve3("APVP-WTL-V-606")
@@ -63,6 +66,22 @@ valve618.connect()
 valve619.connect(valve609, valve803,)
 valve620.connect(valve804, valve606) 
 
-for route in valve614.routes_to(valve615):
-    print([node.ein for node in route]) 
 
+def main():
+
+    app = QApplication(sys.argv)
+
+    # Create a window
+    window = QWidget()
+    window.setWindowTitle('Route List Creator')
+    window.setGeometry(500, 500, 500, 500)  # (x, y, width, height)
+    window.show()
+
+    for route in valve614.routes_to(valve615):
+        print([node.ein for node in route]) 
+    
+    # Execute the application
+    sys.exit(app.exec())
+
+if __name__== '__main__':
+    main()
