@@ -9,7 +9,10 @@ class Node:
     def EIN(self):
         return self.ein
     
-    def connect_back(self, node):
+    def __str__(self):
+        return self.ein
+    
+    def connectBack(self, node):
         if node in self.connections: return
         elif len(self.connections) < self.ways: self.connect(node)
         else: print(self.EIN(), "has maximum number of connections")
@@ -20,9 +23,10 @@ class Node:
             if node:
                 if len(self.connections) < self.ways:
                     self.connections.append(node)
-                    node.connect_back(self)
-                else: 
+                    node.connectBack(self)
+                else:  
                     print("has maximum number of connections")
+        # Not working now that there is no "None" as connection.
 
     def report(self):
         print((self.EIN()), "connections: ")
@@ -32,11 +36,11 @@ class Node:
             else:
                 print("Missing Connection")
     
-    def routes_to(self, target):
+    def routesTo(self, target, num_routes = 1):
         paths = []
         queue = deque([[self]])
 
-        while queue:
+        while queue and len(paths) < num_routes:
             path = queue.popleft()
             node = path[-1]
 

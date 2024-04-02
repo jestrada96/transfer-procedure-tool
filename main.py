@@ -1,87 +1,99 @@
-from classes.node import Node
-from classes.valve2 import Valve2
-from classes.valve3 import Valve3
+import tkinter as tk
+from tkinter import messagebox
+import nodefactory as nf
 
+from classes.docwriter import DocWriter 
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget
 
 # fix connections list max count and back connections checker later, 
 # for now focus on functionality and assume connections will be accurate and logical
-
-# Make connects_to part of Nodes not Valves, will require refactor to have Nodes use connections?
-# How do you want to implement creating a node?
 # Make it similar to a double valve for a nozzle? give it "1 way" for pumps and tkr and blanks??
 
-# dummy = Valve2("---")
-valve806 = Valve3("APVP-WTL-V-806")
-valve609 = Valve3("APVP-WTL-V-609")
-valve803 = Valve3("APVP-WTL-V-803")
-valve802 = Valve3("APVP-WTL-V-802")
-valve804 = Valve3("APVP-WTL-V-804")
-valve805 = Valve3("APVP-WTL-V-805")
-valve801 = Valve3("APVP-WTL-V-801")
-valve610 = Valve3("APVP-WTL-V-808")
-valve603 = Valve2("APVP-WTL-V-603")
-valve601 = Valve3("APVP-WTL-V-601")
-valve602 = Valve3("APVP-WTL-V-602")
-valve606 = Valve3("APVP-WTL-V-606")
-valve607 = Valve3("APVP-WTL-V-607")
-valve608 = Valve3("APVP-WTL-V-608")
-valve611 = Valve3("APVP-WTL-V-611")
-valve612 = Valve3("APVP-WTL-V-612")
-valve613 = Valve3("APVP-WTL-V-613")
-valve614 = Valve3("APVP-WTL-V-614")
-valve615 = Valve3("APVP-WTL-V-615")
-valve616 = Valve3("APVP-WTL-V-616")
-valve617 = Valve3("APVP-WTL-V-617")
-valve618 = Valve3("APVP-WTL-V-618")
-valve619 = Valve3("APVP-WTL-V-619")
-valve620 = Valve3("APVP-WTL-V-620") 
-jumperP = Valve2("jummperP")
-split_01 = Valve3("split")
+def printRoute(source,destination, alternatives = 1):
+    alts = 1
+    try:
+        alts = int(alternatives)
+    except ValueError:
+        messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing best route available.")
+    writer = DocWriter("Possible Routes from " + source.get() + " to " + destination.get())
+    writer.makeDoc()
+    src = nf.node_dict[source.get()]
+    dst = nf.node_dict[destination.get()]
+    for route in src.routesTo(dst, alts):
+        print("Route option: ")
+        writer.addHeading("Route option: ")
+        for node in route:
+            print(node.EIN())
+            writer.addText(node.EIN())
+    writer.save()
 
 
-valve806.connect(valve609)
-valve609.connect()
-valve803.connect(valve802, valve802)
-split_01.connect(valve803, valve804)
-valve802.connect(valve801,valve805)
-valve804.connect()
-valve805.connect()
-valve801.connect(valve802)
-valve610.connect()
-valve603.connect(valve619, valve601,valve613)
-valve601.connect(valve611, valve602)
-valve602.connect(valve601, valve612, valve614)
-valve606.connect(valve608)
-valve607.connect(valve608)
-valve611.connect(valve606)
-valve612.connect()
-valve613.connect()
-valve614.connect()
-valve615.connect(valve607)
-valve616.connect()
-valve617.connect()
-valve618.connect()
-valve619.connect(valve609, valve803,)
-valve620.connect(valve804, valve606) 
+def src_filter(*args):
+    query = src_entry.get().lower() 
+    src_dropdown['menu'].delete(0, tk.END)
+    
+    # Filter items matching the query
+    for node in nodes:
+        if query in node.lower():
+            src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
+
+def dst_filter(*args):
+    query = dst_entry.get().lower() 
+    dst_dropdown['menu'].delete(0, tk.END)
+    
+    # Filter items matching the query
+    for node in nodes:
+        if query in node.lower():
+            dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
 
 
 def main():
-
-    app = QApplication(sys.argv)
-
-    # Create a window
-    window = QWidget()
-    window.setWindowTitle('Route List Creator')
-    window.setGeometry(500, 500, 500, 500)  # (x, y, width, height)
-    window.show()
-
-    for route in valve614.routes_to(valve615):
-        print([node.ein for node in route]) 
+    root = tk.Tk()
+    root.title("RouteFinderTest")
+    root.geometry("500x200")
     
-    # Execute the application
-    sys.exit(app.exec())
+    global nodes
+    nodes = nf.node_dict.keys()
+
+    label0 = tk.Label(root, text="Select transfer origin:")
+    label0.grid(row=0, column= 0, pady = 2)
+
+    
+    global source
+    source = tk.StringVar(root)
+    global src_dropdown
+    src_dropdown = tk.OptionMenu(root, source, *nodes)
+    src_dropdown.grid(row=0, column= 1, pady=2)
+    global src_entry
+    src_entry = tk.Entry(root)
+    src_entry.grid(row=0, column= 2, pady=5, padx=4)
+
+
+    label1 = tk.Label(root, text="Select transfer destination:")
+    label1.grid(row=2, column= 0, pady = 2)
+
+    global destination
+    destination = tk.StringVar(root)
+    global dst_dropdown
+    dst_dropdown = tk.OptionMenu(root, destination, *nodes)
+    dst_dropdown.grid(row=2, column= 1, pady=2)
+    global dst_entry
+    dst_entry = tk.Entry(root)
+    dst_entry.grid(row=2, column= 2, pady=5, padx=4)
+
+    label2 = tk.Label(root, text="Enter number of route alternatives needed:")
+    label2.grid(row=4, column= 0, pady = 2)
+
+    global alternatives 
+    alternatives = tk.Entry(root)
+    alternatives.grid(row=4, column= 1, pady=2)
+
+    src_entry.bind("<KeyRelease>", src_filter)
+    dst_entry.bind("<KeyRelease>", dst_filter)
+
+    printButton = tk.Button(root, text="Find Routes", command=lambda: printRoute(source, destination, alternatives.get()))
+    printButton.grid(row=5, column= 0, pady=20)
+    root.mainloop()
 
 if __name__== '__main__':
     main()
