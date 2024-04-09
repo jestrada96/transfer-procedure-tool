@@ -2,9 +2,14 @@ from collections import deque
 
 class Node:
     connections = []
+    directions = 0
     def __init__(self, ein):
         self.ein = ein
+        self.directions
         self.connections
+        # self.dvi_credited 
+        # self.dvi_used
+        self.show = True
 
     def EIN(self):
         return self.ein
@@ -12,21 +17,28 @@ class Node:
     def __str__(self):
         return self.ein
     
+# fix connections list max count and back connections checker later, 
+# for now focus on functionality and assume connections will be accurate and logical
+# Make it similar to a double valve for a nozzle? give it "1 way" for pumps and tkr and blanks??
+
     def connectBack(self, node):
         if node in self.connections: return
-        elif len(self.connections) < self.ways: self.connect(node)
-        else: print(self.EIN(), "has maximum number of connections")
+        elif len(self.connections) < self.directions: self.connect(node)
+        else: 
+            print(self.EIN(), "has maximum number of connections, cant connect back")
+            print(type(self))
         return
 
     def connect(self, *nodes):
-        for node in nodes[:self.ways]:
-            if node:
-                if len(self.connections) < self.ways:
+        for node in nodes[:self.directions]:
+            if node and node not in self.connections:
+                if len(self.connections) <= self.directions:
                     self.connections.append(node)
                     node.connectBack(self)
                 else:  
-                    print("has maximum number of connections")
-        # Not working now that there is no "None" as connection.
+                    print("has maximum number of connections", self.EIN())
+                    for connection in self.connections:
+                        print(connection.EIN())
 
     def report(self):
         print((self.EIN()), "connections: ")
@@ -36,7 +48,7 @@ class Node:
             else:
                 print("Missing Connection")
     
-    def routesTo(self, target, num_routes = 1):
+    def routesTo(self, target, num_routes = 1, exclude_target = None):
         paths = []
         queue = deque([[self]])
 
@@ -48,8 +60,8 @@ class Node:
                 if path not in paths:
                     paths.append(path)
                 
-            for connection in node.connections:
-                if connection not in path:
+            for connection in node.connections :
+                if connection not in path and (exclude_target is None or exclude_target not in path):
                     queue.append(path + [connection])
 
         return paths

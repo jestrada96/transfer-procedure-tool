@@ -2,10 +2,10 @@ from classes.node import Node
 
 class Valve(Node):
     connections = []
-    ways = 10
+    directions = 0
     def __init__(self, ein):
         self.ein = ein
         self.connections
-        self.ways
+        self.directions
                 
         
