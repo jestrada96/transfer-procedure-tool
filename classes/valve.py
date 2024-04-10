@@ -7,5 +7,7 @@ class Valve(Node):
         self.ein = ein
         self.connections
         self.directions
+        self.show = True
+        self.in_tank = False
                 
         

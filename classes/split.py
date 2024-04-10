@@ -11,6 +11,7 @@ class Split(Node):
         self.node_3 = node_3
         self.connections = []
         self.show = True
-
+        self.in_tank = False
+        
     def EIN(self):
         return None

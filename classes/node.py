@@ -10,6 +10,7 @@ class Node:
         # self.dvi_credited 
         # self.dvi_used
         self.show = True
+        self.in_tank = False
 
     def EIN(self):
         return self.ein
@@ -27,6 +28,9 @@ class Node:
         else: 
             print(self.EIN(), "has maximum number of connections, cant connect back")
             print(type(self))
+            for con in self.connections:
+                print(con.EIN())
+            # print(con.EIN() for con in self.connections)
         return
 
     def connect(self, *nodes):
@@ -65,6 +69,3 @@ class Node:
                     queue.append(path + [connection])
 
         return paths
-
-
-        

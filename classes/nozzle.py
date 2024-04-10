@@ -10,3 +10,4 @@ class Nozzle(Node):
         self.node_2 = None
         self.connections = []
         self.show = False
+        self.in_tank = False

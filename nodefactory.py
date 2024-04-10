@@ -11,9 +11,12 @@ from classes.node import Node
 
 wb = load_workbook(filename = 'Valves.xlsx')
 ws = wb['Connections']
-node_column=ws["B3:B200"]
+name_column=ws["B3:B200"]
 class_column=ws["C3:C200"]
 destinations=ws["D3:F200"]
+
+#key = EIN, value = node object
+inventory = {}
 
 classes = {
         "2-Way-Valve": Valve2,
@@ -26,36 +29,23 @@ classes = {
         None: Valve 
 }
 
-node_dict = {}
+for name_cell in name_column:
+        if name_cell[0].value: 
+            inventory[name_cell[0].value] = None
 
-#Initialize Dictionary
-for cell in node_column:
-        if cell[0].value: 
-            node_dict[cell[0].value] = None
-
-#Populate directory with a node of class bassed on class column
-for key, class_row in zip(node_dict.keys(), class_column):
+for key, class_row in zip(inventory.keys(), class_column):
     for class_cell in class_row:
-        # if class_cell.value in classes.keys(): 
-        node_dict[key] = classes[class_cell.value](key)
+        inventory[key] = classes[class_cell.value](key)
 
-for node, destination_row in zip(node_dict.values(), destinations):
-    # node.setPit();
+for node, destination_row in zip(inventory.values(), destinations):
     for destination_cell in destination_row:
-        if destination_cell.value in node_dict:
+        if destination_cell.value in inventory:
             if destination_cell.value:
-                node.connect(node_dict[destination_cell.value])
-
-# for value in node_dict.values():
-#     print ("\n")
-#     print("connections in ", value.EIN())
-#     print(type(value))
-#     for connection in value.connections:
-#         print(connection.EIN(), end=" ")
+                node.connect(inventory[destination_cell.value])
 
 def getRoutes(a, b):
-    src = node_dict[a]
-    dst = node_dict[b]
+    src = inventory[a]
+    dst = inventory[b]
     return src.routesTo(dst)
 
      

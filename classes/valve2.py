@@ -10,3 +10,4 @@ class Valve2(Valve):
         self.node_2 = None
         self.connections = []
         self.show = True
+        self.in_tank = False

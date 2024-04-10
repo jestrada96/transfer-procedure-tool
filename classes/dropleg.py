@@ -10,4 +10,5 @@ class Dropleg(Node):
         self.connections = []
         self.show = True
         self.dvi_credited = False
-        self.dvi_used   = False
+        self.dvi_used  = False
+        self.in_tank = True
