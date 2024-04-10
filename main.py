@@ -5,7 +5,7 @@ import os
 
 from classes.docwriter import DocWriter 
 
-def printRoute(source,destination, alternatives = 1):
+def makeDocumentFromRoute(source,destination, alternatives = 1):
     src = source.get()
     dst = destination.get()
     alts = 1
@@ -13,13 +13,11 @@ def printRoute(source,destination, alternatives = 1):
         alts = int(alternatives)
     except ValueError:
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
-    writer = DocWriter("Possible Routes from " + src + " to " + dst)
-    routes = nf.getRoutes(src, dst)
+    routes = nf.inventory[src].routesTo(nf.inventory[dst], alts)
+    writer = DocWriter(src + " to " + dst + " draft procedure data:")
+    #change this to use a selected route from the options instead!
     for route in routes:
-        writer.addHeading("Route option: ")
-        for node in route:
-            if node.show:
-                writer.addText(node.EIN())
+        writer.buildDocument(route)
     filename = src +"_to_"+ dst + ".docx"
     writer.save(filename)
     os.system(f'start {filename}')
@@ -92,7 +90,7 @@ def main():
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
 
-    printButton = tk.Button(window, text="Find Routes", command=lambda: printRoute(source, destination, alternatives.get()))
+    printButton = tk.Button(window, text="Find Routes", command=lambda: makeDocumentFromRoute(source, destination, alternatives.get()))
     printButton.grid(row=5, column= 2, pady=20, sticky="ew")
     window.mainloop()
 

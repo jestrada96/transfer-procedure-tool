@@ -43,10 +43,7 @@ for node, destination_row in zip(inventory.values(), destinations):
             if destination_cell.value:
                 node.connect(inventory[destination_cell.value])
 
-def getRoutes(a, b):
-    src = inventory[a]
-    dst = inventory[b]
-    return src.routesTo(dst)
+
 
      
                 
