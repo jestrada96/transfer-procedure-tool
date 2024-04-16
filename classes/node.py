@@ -3,6 +3,8 @@ from collections import deque
 class Node:
     connections = []
     directions = 0
+    pit = None
+
     def __init__(self, ein):
         self.ein = ein
         self.directions
@@ -11,6 +13,7 @@ class Node:
         # self.dvi_used
         self.show = True
         self.in_tank = False
+        self.pit
 
     def EIN(self):
         return self.ein
@@ -18,10 +21,9 @@ class Node:
     def __str__(self):
         return self.ein
     
-# fix connections list max count and back connections checker later, 
-# for now focus on functionality and assume connections will be accurate and logical
-# Make it similar to a double valve for a nozzle? give it "1 way" for pumps and tkr and blanks??
-
+    def setPit(self, str):
+        self.pit = str
+    
     def connectBack(self, node):
         if node in self.connections: return
         elif len(self.connections) < self.directions: self.connect(node)
@@ -44,6 +46,7 @@ class Node:
                     for connection in self.connections:
                         print(connection.EIN())
 
+    # def addToPit():
     def report(self):
         print((self.EIN()), "connections: ")
         for node in self.connections:

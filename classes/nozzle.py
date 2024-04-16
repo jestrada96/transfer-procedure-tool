@@ -11,3 +11,6 @@ class Nozzle(Node):
         self.connections = []
         self.show = False
         self.in_tank = False
+
+    def EIN(self):
+        return None

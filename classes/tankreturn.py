@@ -1,6 +1,6 @@
 from classes.node import Node
 
-class Dropleg(Node):
+class TankReturn(Node):
     directions = 1
     def __init__(self, ein):
         super().__init__(ein) 

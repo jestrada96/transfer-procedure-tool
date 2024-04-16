@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-import nodefactory as nf
+import excelData as ex
 import os
 
 from classes.docwriter import DocWriter 
@@ -13,7 +13,7 @@ def makeDocumentFromRoute(source,destination, alternatives = 1):
         alts = int(alternatives)
     except ValueError:
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
-    routes = nf.inventory[src].routesTo(nf.inventory[dst], alts)
+    routes = ex.inventory[src].routesTo(ex.inventory[dst], alts)
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     #change this to use a selected route from the options instead!
     for route in routes:
@@ -27,7 +27,7 @@ def src_filter(*args):
     src_dropdown['menu'].delete(0, tk.END)
 
     for node in nodes:
-        if query in node.lower() and (nf.inventory[node].in_tank or not select_from_all):
+        if query in node.lower() and (ex.inventory[node].in_tank or not select_from_all):
             src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
 
 def toggle_boolean(*args):
@@ -38,7 +38,7 @@ def dst_filter(*args):
     dst_dropdown['menu'].delete(0, tk.END)
     
     for node in nodes:
-        if query in node.lower() and (nf.inventory[node].in_tank or not select_from_all):
+        if query in node.lower() and (ex.inventory[node].in_tank or not select_from_all):
             dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
 
 def main():
@@ -47,7 +47,7 @@ def main():
     window.geometry("550x300")
 
     global nodes
-    nodes = nf.inventory.keys()
+    nodes = ex.inventory.keys()
 
     label0 = tk.Label(window, text="Select transfer origin:")
     label0.grid(row=0, column= 0, pady = 2)
