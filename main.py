@@ -1,9 +1,10 @@
+from classes.docWriter import DocWriter 
+import excelData as ex
 import tkinter as tk
 from tkinter import messagebox
-import excelData as ex
-import os
+from tkinter import filedialog
 
-from classes.docWriter import DocWriter 
+import os
 
 def makeDocumentFromRoute(source, destination, alternatives = 1):
     src = source.get()
@@ -15,12 +16,12 @@ def makeDocumentFromRoute(source, destination, alternatives = 1):
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     #route is found here:
-    routes = ex.inventory[src].routesTo(ex.inventory[dst], alts)
+    routes = components[src].routesTo(components[dst], alts)
     #change this to use a selected route from the options instead!
     for route in routes:
         for i in range(1,len(route)-2):
             route[i].setPosition(route)
-        writer.buildDocument(route)
+        writer.buildDocument(route,pits)
     filename = src +"_to_"+ dst + ".docx"
     writer.save(filename)
     os.system(f'start {filename}')
@@ -29,7 +30,7 @@ def src_filter(*args):
     query = src_entry.get().lower() 
     src_dropdown['menu'].delete(0, tk.END)
     for node in nodes:
-        # if query in node.lower() and (ex.inventory[node].in_tank or select_from_all):
+        # if query in node.lower() and (components[node].in_tank or select_from_all):
         if query in node.lower():
             src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
 
@@ -37,7 +38,7 @@ def dst_filter(*args):
     query = dst_entry.get().lower() 
     dst_dropdown['menu'].delete(0, tk.END)
     for node in nodes:
-        # if query in node.lower() and (ex.inventory[node].in_tank or select_from_all):
+        # if query in node.lower() and (components[node].in_tank or select_from_all):
         if query in node.lower():
             dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
 
@@ -45,10 +46,20 @@ def main():
     window = tk.Tk()
     window.title("Waste Transfer Route Generator")
     window.geometry("800x300")
+    filename = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'
+    global components
+    global pits 
+    try: 
+        components, pits =  ex.ImportComponents(filename)
+    except Exception as e:
+        filewarning = filename + " not found. Select Excel Data File"
+        messagebox.showwarning("Warning", filewarning)
+        filename = filedialog.askopenfilename(defaultextension="xlsx" ,title = "Select Excel Data File")
+        components, pits =  ex.ImportComponents(filename)
 
     def toggle_boolean(*args):
         if select_from_all:
-            nodes = ex.inventory.keys()
+            nodes = components.keys()
             for node in nodes:
                 # dst_dropdown['menu'].delete(0, tk.END)
                 dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
@@ -57,8 +68,8 @@ def main():
             dst_filter()
 
     items_to_tank = set()
-    for item in ex.inventory.keys():
-        if ex.inventory[item].in_tank:
+    for item in components.keys():
+        if components[item].in_tank:
             items_to_tank.add(item)
     
     global nodes 

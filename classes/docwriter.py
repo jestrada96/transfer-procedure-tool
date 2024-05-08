@@ -1,10 +1,9 @@
 from docx import Document
 from collections import OrderedDict
-from classes.valve3 import Valve3
-from classes.valve2 import Valve2
-from excelData import pits
 from docx.shared import Pt
 from docx.shared import RGBColor
+from classes.valve2 import Valve2
+from classes.valve3 import Valve3
 class DocWriter():
     def __init__(self, name="MyDoc"):
         self.name = name
@@ -32,7 +31,7 @@ class DocWriter():
     def save(self, filename= "PrintedRoute.docx"):
         self.doc.save(filename)
 
-    def buildDocument(self, route):
+    def buildDocument(self, route, pits):
         route_list = self.makeSection("Route List: ", "Valves in route (reference only):")
         used_pits = OrderedDict()
         used_jumpers = OrderedDict()
