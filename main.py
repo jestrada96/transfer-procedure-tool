@@ -76,7 +76,7 @@ def main():
     nodes = items_to_tank
 
     label0 = tk.Label(window, text="Select transfer origin:")
-    label0.grid(row=0, column= 0, pady = 2)
+    label0.grid(row=0, column= 0, pady = 2, padx=10,sticky = "w")
 
     global source
     source = tk.StringVar(window)
@@ -88,7 +88,7 @@ def main():
     src_entry.grid(row=0, column= 1, pady=5, padx=4)
 
     label1 = tk.Label(window, text="Select transfer destination:")
-    label1.grid(row=2, column= 0, pady = 2)
+    label1.grid(row=2, column= 0, pady = 2, padx=10, sticky = "w")
 
     global destination
     destination = tk.StringVar(window)
@@ -107,17 +107,20 @@ def main():
     checkbox.grid(row=0, column=4)
 
     label2 = tk.Label(window, text="Enter number of route alternatives needed:")
-    label2.grid(row=4, column= 0, pady = 2, padx=7)
+    label2.grid(row=4, column= 0, pady = 2, padx=10, sticky = "w")
 
     global alternatives 
     alternatives = tk.Entry(window)
-    alternatives.grid(row=4, column= 1, columnspan=2, pady=2, sticky="ew")
+    alternatives.grid(row=4, column= 1, columnspan=1, pady=2)
+
+    label3 = tk.Label(window, text= "Using data from: "+ filename)
+    label3.grid(row = 6, columnspan=5, padx=10, sticky = "w")
 
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
 
     printButton = tk.Button(window, text="Find Routes", command=lambda: makeDocumentFromRoute(source, destination, alternatives.get()))
-    printButton.grid(row=5, column= 2, pady=20, sticky="ew")
+    printButton.grid(row=5, column= 2, pady=20)
     window.mainloop()
 
 if __name__== '__main__':   
