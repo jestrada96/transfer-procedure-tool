@@ -1,4 +1,4 @@
-from classes.docWriter import DocWriter 
+from classes.docwriter import DocWriter 
 import excelData as ex
 import tkinter as tk
 from tkinter import messagebox
@@ -44,17 +44,16 @@ def dst_filter(*args):
 
 def main():
     window = tk.Tk()
-    window.title("Waste Transfer Route Generator")
-    window.geometry("800x300")
-    filename = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'
+    window.title("Waste Transfer Procedure Data Tool")
+    filename = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx  ee'
     global components
     global pits 
     try: 
         components, pits =  ex.ImportComponents(filename)
     except Exception as e:
-        filewarning = filename + " not found. Select Excel Data File"
+        filewarning ="Unable to find file at:\n\n" + filename + "\n\n Please browse for Excel data file"
         messagebox.showwarning("Warning", filewarning)
-        filename = filedialog.askopenfilename(defaultextension="xlsx" ,title = "Select Excel Data File")
+        filename = filedialog.askopenfilename(defaultextension="xlsx" ,title = "Select Procedure Data Excel file")
         components, pits =  ex.ImportComponents(filename)
 
     def toggle_boolean(*args):
@@ -62,6 +61,7 @@ def main():
             nodes = components.keys()
             for node in nodes:
                 # dst_dropdown['menu'].delete(0, tk.END)
+                src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
                 dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
         else:
             src_filter()
@@ -103,24 +103,24 @@ def main():
     select_from_all = tk.BooleanVar()
     select_from_all.set(False)
 
-    checkbox = tk.Checkbutton(window, text="Show all", variable=select_from_all, command = toggle_boolean)
+    checkbox = tk.Checkbutton(window, text="Include Valves", variable=select_from_all, command = toggle_boolean)
     checkbox.grid(row=0, column=4)
 
-    label2 = tk.Label(window, text="Enter number of route alternatives needed:")
-    label2.grid(row=4, column= 0, pady = 2, padx=10, sticky = "w")
+    label2 = tk.Label(window, text="Number of route alternatives:")
+    label2.grid(row=4, column= 0, pady = 5, padx=10, sticky = "w")
 
     global alternatives 
     alternatives = tk.Entry(window)
     alternatives.grid(row=4, column= 1, columnspan=1, pady=2)
 
-    label3 = tk.Label(window, text= "Using data from: "+ filename)
-    label3.grid(row = 6, columnspan=5, padx=10, sticky = "w")
+    label3 = tk.Label(window, text= "Using data from: "+ filename, wraplength=600)
+    label3.grid(row = 5, columnspan=9, rowspan=3, padx=10, pady=20,sticky = "n")
 
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
 
     printButton = tk.Button(window, text="Find Routes", command=lambda: makeDocumentFromRoute(source, destination, alternatives.get()))
-    printButton.grid(row=5, column= 2, pady=20)
+    printButton.grid(row=4, column= 2, pady=5)
     window.mainloop()
 
 if __name__== '__main__':   
