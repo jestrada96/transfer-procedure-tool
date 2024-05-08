@@ -4,7 +4,11 @@ class Node:
     connections = []
     directions = 0
     pit = None
-
+    jumper = None
+    jumperLabel = None
+    position = None
+    onJumper = True
+    in_tank = False
     def __init__(self, ein):
         self.ein = ein
         self.directions
@@ -14,6 +18,10 @@ class Node:
         self.show = True
         self.in_tank = False
         self.pit
+        self.jumper
+        self.jumperLabel
+        self.position
+        self.onJumper
 
     def EIN(self):
         return self.ein
@@ -23,6 +31,12 @@ class Node:
     
     def setPit(self, str):
         self.pit = str
+
+    def setJumper(self, jumper):
+        self.jumper = jumper
+
+    def setPosition(self, route = None):
+        return
     
     def connectBack(self, node):
         if node in self.connections: return

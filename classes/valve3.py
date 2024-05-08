@@ -12,5 +12,15 @@ class Valve3(Valve):
         self.connections = []
         self.show = True
         self.in_tank = False
+        self.position
+    
+    def setPosition(self, route = None):
+        for connection in self.connections:
+            if connection in route:
+                pass
+            else:
+                self.position = "BLOCK " +  connection.EIN()
+
+
 
 

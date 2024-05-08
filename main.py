@@ -3,9 +3,9 @@ from tkinter import messagebox
 import excelData as ex
 import os
 
-from classes.docwriter import DocWriter 
+from classes.docWriter import DocWriter 
 
-def makeDocumentFromRoute(source,destination, alternatives = 1):
+def makeDocumentFromRoute(source, destination, alternatives = 1):
     src = source.get()
     dst = destination.get()
     alts = 1
@@ -13,10 +13,13 @@ def makeDocumentFromRoute(source,destination, alternatives = 1):
         alts = int(alternatives)
     except ValueError:
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
-    routes = ex.inventory[src].routesTo(ex.inventory[dst], alts)
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
+    #route is found here:
+    routes = ex.inventory[src].routesTo(ex.inventory[dst], alts)
     #change this to use a selected route from the options instead!
     for route in routes:
+        for i in range(1,len(route)-2):
+            route[i].setPosition(route)
         writer.buildDocument(route)
     filename = src +"_to_"+ dst + ".docx"
     writer.save(filename)
@@ -25,29 +28,41 @@ def makeDocumentFromRoute(source,destination, alternatives = 1):
 def src_filter(*args):
     query = src_entry.get().lower() 
     src_dropdown['menu'].delete(0, tk.END)
-
     for node in nodes:
-        if query in node.lower() and (ex.inventory[node].in_tank or not select_from_all):
+        # if query in node.lower() and (ex.inventory[node].in_tank or select_from_all):
+        if query in node.lower():
             src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
-
-def toggle_boolean(*args):
-    select_from_all.set(not select_from_all.get())
 
 def dst_filter(*args):
     query = dst_entry.get().lower() 
     dst_dropdown['menu'].delete(0, tk.END)
-    
     for node in nodes:
-        if query in node.lower() and (ex.inventory[node].in_tank or not select_from_all):
+        # if query in node.lower() and (ex.inventory[node].in_tank or select_from_all):
+        if query in node.lower():
             dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
 
 def main():
     window = tk.Tk()
     window.title("Waste Transfer Route Generator")
-    window.geometry("550x300")
+    window.geometry("800x300")
 
-    global nodes
-    nodes = ex.inventory.keys()
+    def toggle_boolean(*args):
+        if select_from_all:
+            nodes = ex.inventory.keys()
+            for node in nodes:
+                # dst_dropdown['menu'].delete(0, tk.END)
+                dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
+        else:
+            src_filter()
+            dst_filter()
+
+    items_to_tank = set()
+    for item in ex.inventory.keys():
+        if ex.inventory[item].in_tank:
+            items_to_tank.add(item)
+    
+    global nodes 
+    nodes = items_to_tank
 
     label0 = tk.Label(window, text="Select transfer origin:")
     label0.grid(row=0, column= 0, pady = 2)
@@ -75,10 +90,10 @@ def main():
 
     global select_from_all
     select_from_all = tk.BooleanVar()
-    select_from_all.set(True)
+    select_from_all.set(False)
 
-    checkbox = tk.Checkbutton(window, text="Show only Pumps/Tank Returns", variable=select_from_all, command=lambda: toggle_boolean)
-    # checkbox.grid(row=0, column=4)
+    checkbox = tk.Checkbutton(window, text="Show all", variable=select_from_all, command = toggle_boolean)
+    checkbox.grid(row=0, column=4)
 
     label2 = tk.Label(window, text="Enter number of route alternatives needed:")
     label2.grid(row=4, column= 0, pady = 2, padx=7)
@@ -94,5 +109,7 @@ def main():
     printButton.grid(row=5, column= 2, pady=20, sticky="ew")
     window.mainloop()
 
-if __name__== '__main__':
+if __name__== '__main__':   
     main()
+
+# TO DO: FIGURE OUT DVI, FIGURE OUT SPLITS NECESSARY??

@@ -11,3 +11,9 @@ class Valve2(Valve):
         self.connections = []
         self.show = True
         self.in_tank = False
+        self.position = "CLOSED"
+
+    def setPosition(self, route = None):
+            self.position = "OPEN "
+
+        

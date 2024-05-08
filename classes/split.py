@@ -10,8 +10,9 @@ class Split(Node):
         self.node_2 = node_2
         self.node_3 = node_3
         self.connections = []
-        self.show = True
+        self.show = False
         self.in_tank = False
+        self.onJumper = False
         
     def EIN(self):
         return None
