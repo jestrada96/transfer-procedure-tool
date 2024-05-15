@@ -33,7 +33,6 @@ class DocWriter():
         self.doc.save(filename)
 
     def buildDocument(self, route, pits):
-        print('hi')
         route_list = self.makeSection("Route List: ", "Valves in route (reference only):")
         used_pits = OrderedDict()
         used_jumpers = OrderedDict()
@@ -46,6 +45,8 @@ class DocWriter():
             if node.show:
                 route_list.add_run("\n")
                 route_list.add_run(node.EIN())
+                route_list.add_run("\t")
+                route_list.add_run(node.dvi_credited)
         
         heaterEINs = self.makeSection("Section 5.5.3 heaters: " ,"Replace existing data with the following:")
         for pit in used_pits:

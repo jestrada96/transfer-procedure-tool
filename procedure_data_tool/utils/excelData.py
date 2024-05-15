@@ -60,11 +60,9 @@ def ImportComponents(filepath = '//hanford/data/sitedata/WasteTransferEng/Waste 
     conections_matrix=cnx["G3:I200"]
 
     for row in cnx.iter_rows(min_row=3, values_only= True):
-        component = row[1]
-        component_type = row[2]
-        inventory[component] = component_types[component_type](component)
-        inventory[component].setPit(row[3])
-        inventory[component].setJumper(row[4])
+        name = row[1]
+        type = row[2]
+        inventory[name] = component_types[type](name, pit = row[3], jumper = row[4], dvi = row[5])
 
     for component, connections in zip(inventory.values(), conections_matrix):
         for connection in connections:

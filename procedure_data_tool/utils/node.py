@@ -8,17 +8,19 @@ class Node:
     jumperLabel = None
     position = None
     onJumper = True
+    dvi_credited = None
     in_tank = False
-    def __init__(self, ein):
+    def __init__(self, ein, pit, jumper):
         self.ein = ein
+        self.pit = pit
+        self.jumper = jumper
         self.directions
         self.connections
         # self.dvi_credited 
         # self.dvi_used
         self.show = True
         self.in_tank = False
-        self.pit
-        self.jumper
+        self.dvi_credited = None
         self.jumperLabel
         self.position
         self.onJumper
