@@ -1,5 +1,6 @@
 from procedure_data_tool.utils.docwriter import DocWriter 
 import procedure_data_tool.utils.excelData as ex
+import procedure_data_tool.utils.graph as gr
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
@@ -17,7 +18,8 @@ def find_routes(source, destination, alternatives = 1):
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     #route is found here:
     routes = components[src].routesTo(components[dst], alts)
-    #change this to use a selected route from the options instead!
+    #change this to use a selected route from a list of route options instead!
+    gr.makeGraph(routes[0])
     for route in routes:
         for i in range(1,len(route)-2):
             route[i].setPosition(route)
@@ -25,6 +27,7 @@ def find_routes(source, destination, alternatives = 1):
     filename = src +"_to_"+ dst + ".docx"
     writer.save(filename)
     os.system(f'start {filename}')
+    
 
 def src_filter(*args):
     query = src_entry.get().lower() 
@@ -70,6 +73,7 @@ def main():
         filewarning ="Unable to find file at:\n\n" + file_path + "\n\n Please browse for Excel data file"
         messagebox.showwarning("Warning", filewarning)
         components, pits =  ex.importComponents(browse_file())
+    
     global header_message 
     header_message = tk.StringVar()
     header_message.set("Using data from: "+ file_path)
