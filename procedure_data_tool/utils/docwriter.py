@@ -33,7 +33,7 @@ class DocWriter():
         self.doc.save(filename)
 
     def buildDocument(self, route, pits):
-        route_list = self.makeSection("Route List: ", "Valves in route (reference only):")
+        route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/Position dependent")
         used_pits = OrderedDict()
         used_jumpers = OrderedDict()
         for node in route:

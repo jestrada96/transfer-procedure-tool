@@ -21,8 +21,14 @@ class Valve3(Valve):
             if connection in route:
                 pass
             else:
-                self.position = "BLOCK " +  connection.EIN()
-
+                if connection.EIN():
+                    self.position = "BLOCK " +  connection.EIN()
+                else:
+                    for next_connection in connection.connections:
+                        if next_connection == self or next_connection in self.connections:
+                            pass
+                        else:
+                            self.position = "BLOCK " + next_connection.EIN()
 
 
 

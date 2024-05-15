@@ -10,6 +10,7 @@ class Split(Node):
         self.show = False
         self.in_tank = False
         self.onJumper = False
+        self.color = "white"
         
     def EIN(self):
         return None
