@@ -12,4 +12,4 @@ class Pump(Node):
         self.dvi_credited 
         self.dvi_used = False
         self.in_tank = True
-        
+        self.color = "mediumpurple"

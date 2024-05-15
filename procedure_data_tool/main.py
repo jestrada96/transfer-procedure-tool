@@ -19,7 +19,7 @@ def find_routes(source, destination, alternatives = 1):
     #route is found here:
     routes = components[src].routesTo(components[dst], alts)
     #change this to use a selected route from a list of route options instead!
-    gr.makeGraph(routes[0])
+    gr.makeGraph(components, routes[0])
     for route in routes:
         for i in range(1,len(route)-2):
             route[i].setPosition(route)

@@ -11,6 +11,10 @@ class Valve3(Valve):
         self.in_tank = False
         self.position
         self.dvi_credited = dvi
+        if (dvi == "YES"):
+            self.color = "skyblue"
+        elif (dvi == "POS"):
+            self.color = "red"
     
     def setPosition(self, route = None):
         for connection in self.connections:

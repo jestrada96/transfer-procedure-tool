@@ -10,6 +10,7 @@ class Node:
     onJumper = True
     dvi_credited = None
     in_tank = False
+    color = 'lightgray'
     def __init__(self, ein, pit, jumper):
         self.ein = ein
         self.pit = pit
@@ -24,6 +25,7 @@ class Node:
         self.jumperLabel
         self.position
         self.onJumper
+        self.color
 
     def EIN(self):
         return self.ein
