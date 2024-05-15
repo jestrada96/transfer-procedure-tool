@@ -1,4 +1,4 @@
-from utils.valve import Valve
+from procedure_data_tool.utils.valve import Valve
 
 class Valve2(Valve):
     directions = 2

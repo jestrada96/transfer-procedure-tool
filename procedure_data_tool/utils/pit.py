@@ -1,4 +1,4 @@
-from utils.node import Node
+from procedure_data_tool.utils.node import Node
 
 class Pit():
     def __init__(self, name, nace = None, nacePMID = None, label = None, drain = None, drainSealPos = None):

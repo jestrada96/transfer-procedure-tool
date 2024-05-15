@@ -2,8 +2,8 @@ from docx import Document
 from collections import OrderedDict
 from docx.shared import Pt
 from docx.shared import RGBColor
-from utils.valve2 import Valve2
-from utils.valve3 import Valve3
+from procedure_data_tool.utils.valve2 import Valve2
+from procedure_data_tool.utils.valve3 import Valve3
 
 class DocWriter():
     def __init__(self, name="MyDoc"):
@@ -33,6 +33,7 @@ class DocWriter():
         self.doc.save(filename)
 
     def buildDocument(self, route, pits):
+        print('hi')
         route_list = self.makeSection("Route List: ", "Valves in route (reference only):")
         used_pits = OrderedDict()
         used_jumpers = OrderedDict()

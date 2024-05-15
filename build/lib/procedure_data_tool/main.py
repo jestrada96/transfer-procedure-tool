@@ -1,5 +1,5 @@
-from classes.docwriter import DocWriter 
-import excelData as ex
+from utils.docwriter import DocWriter 
+import utils.excelData as ex
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog

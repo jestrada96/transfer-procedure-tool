@@ -1,12 +1,12 @@
 globals().clear()
 from openpyxl import load_workbook
-from classes.valve import Valve
-from classes.valve2 import Valve2
-from classes.valve3 import Valve3
-from classes.split import Split
-from classes.pump import Pump
-from classes.tankreturn import TankReturn
-from classes.pit import Pit
+from procedure_data_tool.utils.valve import Valve
+from procedure_data_tool.utils.valve2 import Valve2
+from procedure_data_tool.utils.valve3 import Valve3
+from procedure_data_tool.utils.split import Split
+from procedure_data_tool.utils.pump import Pump
+from procedure_data_tool.utils.tankreturn import TankReturn
+from procedure_data_tool.utils.pit import Pit
 
 def ImportComponents(filepath = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'):
     try:
@@ -57,14 +57,14 @@ def ImportComponents(filepath = '//hanford/data/sitedata/WasteTransferEng/Waste 
     inventory = {}
 
     cnx = wb['Connections']
-    conections_matrix=cnx["D3:F200"]
+    conections_matrix=cnx["G3:I200"]
 
     for row in cnx.iter_rows(min_row=3, values_only= True):
         component = row[1]
         component_type = row[2]
         inventory[component] = component_types[component_type](component)
-        inventory[component].setPit(row[6])
-        inventory[component].setJumper(row[7])
+        inventory[component].setPit(row[3])
+        inventory[component].setJumper(row[4])
 
     for component, connections in zip(inventory.values(), conections_matrix):
         for connection in connections:

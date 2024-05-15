@@ -1,5 +1,5 @@
-from utils.docwriter import DocWriter 
-import excelData as ex
+from procedure_data_tool.utils.docwriter import DocWriter 
+import procedure_data_tool.utils.excelData as ex
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
@@ -7,6 +7,7 @@ from tkinter import filedialog
 import os
 
 def makeDocumentFromRoute(source, destination, alternatives = 1):
+
     src = source.get()
     dst = destination.get()
     alts = 1

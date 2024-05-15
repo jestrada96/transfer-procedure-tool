@@ -1,4 +1,4 @@
-from utils.node import Node
+from procedure_data_tool.utils.node import Node
 
 class Pump(Node):
     directions = 100

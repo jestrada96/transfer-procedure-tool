@@ -1,2 +1,2 @@
 [console_scripts]
-launch_tool = procedure_data_tool.main:main
+transfer_tool = procedure_data_tool.main:main
