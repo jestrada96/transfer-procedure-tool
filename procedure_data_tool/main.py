@@ -86,7 +86,7 @@ def main():
     label3.grid(row = 0, columnspan=3, rowspan=1, padx=10, pady=20,sticky = "w")
 
     file_button = tk.Button(window, text= "Use a different file", command=lambda: load_new_file())
-    file_button.grid(row = 0, column = 4, padx= 10)
+    file_button.grid(row = 0, column = 3, padx= 10)
 
     global displayed_nodes 
     displayed_nodes = components.keys()
@@ -123,8 +123,8 @@ def main():
     show_all = tk.BooleanVar()
     show_all.set(False)
 
-    checkbox = tk.Checkbutton(window, text="Show valves", variable=show_all, command = toggle_boolean)
-    checkbox.grid(row=2, column=4)
+    checkbox = tk.Checkbutton(window, text="Include valves", variable=show_all, command = toggle_boolean)
+    checkbox.grid(row=2, column=3)
 
     label2 = tk.Label(window, text="Number of route alternatives:")
     label2.grid(row=5, column= 0, pady = 5, padx=10, sticky = "w")
@@ -134,8 +134,8 @@ def main():
     alternatives.insert(0, "1") 
     alternatives.grid(row=5, column= 1, columnspan=1, padx=4, pady=2, sticky="w")
    
-    find_routes_button = tk.Button(window, text="Find routes", command=lambda: find_routes(source, destination, alternatives.get()))
-    find_routes_button.grid(row=5, column= 4, padx = 10, pady=15)
+    find_routes_button = tk.Button(window, text="Find routes!", command=lambda: find_routes(source, destination, alternatives.get()))
+    find_routes_button.grid(row=5, column= 3, padx = 10, pady=15)
 
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
