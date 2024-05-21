@@ -47,7 +47,7 @@ class DocWriter():
                 route_list.add_run(node.EIN())
                 route_list.add_run("\t")
                 route_list.add_run(node.dvi_credited)
-        
+                
         heaterEINs = self.makeSection("Section 5.5.3 heaters: " ,"Replace existing data with the following:")
         for pit in used_pits:
             for heater in pits[pit].heaters:
@@ -56,21 +56,27 @@ class DocWriter():
                 heaterEINs.add_run("\t \t")
                 heaterEINs.add_run(pits[pit].nacePMID)
         
-        pits579 = self.makeSection("Steps 5.17.9: ","Replace existing data with the following:")
+        pits5179 = self.makeSection("Steps 5.17.9: ","Replace existing data with the following:")
         for pit in used_pits:
-            pits579.add_run("\n")
-            pits579.add_run(pits[pit].label)
+            pits5179.add_run("\n")
+            pits5179.add_run(pits[pit].label)
         checklist1 = self.makeSection("Checklist 1: ","Replace list with:")
         for jumper in used_jumpers:
             checklist1.add_run("\n")
             checklist1.add_run(jumper[0])
-            checklist1.add_run("\t \t")
+            checklist1.add_run("\t \t \t")
             checklist1.add_run("Jumper: ").font.bold = True
             checklist1.add_run(jumper[1])
-        checklist3 = self.makeSection("Checklist 3:","")
-        checklist4 = self.makeSection("Checklist 4:","")
-        checklist5 = self.makeSection("Checklist 5:","")
-        checklist6 = self.makeSection("Checklist 6:","")
+        checklist3 = self.makeSection("*IN DEVELOPMENT* Checklist 3: Transfer Valving","")
+        for i in range(1,len(route)-2):
+            if (type(route[i]) == Valve3 or type(route[i]) == Valve2 ):
+                checklist3.add_run("\n")
+                checklist3.add_run(route[i].EIN())
+                checklist3.add_run("\t \t")
+                checklist3.add_run(route[i].position)
+        checklist4 = self.makeSection("Checklist 4: Checklist 4 - Flush Transfer Route to Transfer Pump Valving","")
+        checklist5 = self.makeSection("Checklist 5: Checklist 4 - Flush Transfer Route to Receiving Tank Valving","")
+        checklist6 = self.makeSection("Checklist 6: Return to Transfer Valving","")
         checklist7LD = self.makeSection("Checklist 7 - Tank pit/Structure Leak Detection")
         checklist7TF = self.makeSection("Checklist 7 - TFSPS Temperature Equipment Checks")
         for pit in used_pits:
@@ -79,7 +85,6 @@ class DocWriter():
                 checklist7TF.add_run(tfsps)
                 checklist7TF.add_run("\t \t")
                 checklist7TF.add_run(pmid)
-
         checklist7D = self.makeSection("Checklist 7 - Drain Seal Assemblies:")
         for pit in used_pits:
             checklist7D.add_run("\n")
@@ -96,12 +101,5 @@ class DocWriter():
             checklist7N.add_run("\t \t")
             checklist7N.add_run(pits[pit].nacePMID)
 
-        dviBlockTest = self.makeSection("Test: ", "(Valve Positions Test)")
-        for i in range(1,len(route)-2):
-            if (type(route[i]) == Valve3 or type(route[i]) == Valve2 ):
-                dviBlockTest.add_run("\n")
-                dviBlockTest.add_run(route[i].EIN())
-                dviBlockTest.add_run("\t \t")
-                dviBlockTest.add_run(route[i].position)
 
 

@@ -21,7 +21,6 @@ def makeGraph(inventory, route):
         color_map.append(inventory[node].color)
 
     pos = nx.planar_layout(G)  # Position nodes using the Fruchterman-Reingold force-directed algorithm
-    # nx.draw(G, pos, with_labels=True, node_size=80, node_color="skyblue", font_size=9, font_color='black', edge_color='gray', linewidths=10)
     nx.draw(G, pos, with_labels=True, node_size=80, node_color=color_map, font_size=9, font_color='black', edge_color='gray', linewidths=10)
-    plt.title = "Route PReview"
+    plt.title = "Route Preview"
     plt.show()

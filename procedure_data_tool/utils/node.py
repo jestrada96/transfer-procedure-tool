@@ -17,7 +17,6 @@ class Node:
         self.jumper = jumper
         self.directions
         self.connections
-        # self.dvi_credited 
         # self.dvi_used
         self.show = True
         self.in_tank = False
