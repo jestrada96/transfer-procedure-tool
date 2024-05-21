@@ -14,3 +14,5 @@ class Pit():
         self.drainSealPos = drainSealPos 
         self.encasementDrainValve = []
         self.edvPos = []
+    def add_node(self, node):
+        self.nodes.append(node)
