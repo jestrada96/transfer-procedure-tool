@@ -36,18 +36,19 @@ def find_routes(source, destination, alternatives = 1):
 def src_filter(*args):
     query = src_entry.get().lower() 
     src_dropdown['menu'].delete(0, tk.END)
-    for node in nodes:
-        # if query in node.lower() and (components[node].in_tank or select_from_all):
-        if query in node.lower():
-            src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
+    for node in displayed_nodes:
+        if node:
+            if (query in node.lower() and (components[node].in_tank or show_all.get())):
+                src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
+
 
 def dst_filter(*args):
     query = dst_entry.get().lower() 
     dst_dropdown['menu'].delete(0, tk.END)
-    for node in nodes:
-        # if query in node.lower() and (components[node].in_tank or select_from_all):
-        if query in node.lower():
-            dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
+    for node in displayed_nodes:
+        if node:
+            if (query in node.lower() and (components[node].in_tank or show_all.get())):
+                dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
 
 def browse_file(*args):
     filename = filedialog.askopenfilename(defaultextension="xlsx", title = "Select Procedure Data Excel file")
@@ -87,24 +88,12 @@ def main():
     file_button = tk.Button(window, text= "Use a different file", command=lambda: load_new_file())
     file_button.grid(row = 0, column = 4, padx= 10)
 
-    def toggle_boolean(*args):
-        if select_from_all:
-            nodes = components.keys()
-            for node in nodes:
-                # dst_dropdown['menu'].delete(0, tk.END)
-                src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
-                dst_dropdown['menu'].add_command(label=node, command=tk._setit(destination, node))
-        else:
-            src_filter()
-            dst_filter()
+    global displayed_nodes 
+    displayed_nodes = components.keys()
 
-    items_to_tank = set()
-    for item in components.keys():
-        if components[item].in_tank:
-            items_to_tank.add(item)
-    
-    global nodes 
-    nodes = items_to_tank
+    def toggle_boolean(*args):
+        src_filter()
+        dst_filter()
 
     label0 = tk.Label(window, text="Select transfer origin:")
     label0.grid(row=2, column= 0, pady = 2, padx=10,sticky = "w")
@@ -112,7 +101,7 @@ def main():
     global source
     source = tk.StringVar(window)
     global src_dropdown
-    src_dropdown = tk.OptionMenu(window, source, *nodes)
+    src_dropdown = tk.OptionMenu(window, source, *displayed_nodes)
     src_dropdown.grid(row=2, column= 2, pady=2)
     global src_entry
     src_entry = tk.Entry(window)
@@ -124,17 +113,17 @@ def main():
     global destination
     destination = tk.StringVar(window)
     global dst_dropdown
-    dst_dropdown = tk.OptionMenu(window, destination, *nodes)
+    dst_dropdown = tk.OptionMenu(window, destination, *displayed_nodes)
     dst_dropdown.grid(row=3, column= 2, pady=2)
     global dst_entry
     dst_entry = tk.Entry(window)
     dst_entry.grid(row=3, column= 1, pady=5, padx=4, sticky="w")
 
-    global select_from_all
-    select_from_all = tk.BooleanVar()
-    select_from_all.set(False)
+    global show_all
+    show_all = tk.BooleanVar()
+    show_all.set(False)
 
-    checkbox = tk.Checkbutton(window, text="Show valves", variable=select_from_all, command = toggle_boolean)
+    checkbox = tk.Checkbutton(window, text="Show valves", variable=show_all, command = toggle_boolean)
     checkbox.grid(row=2, column=4)
 
     label2 = tk.Label(window, text="Number of route alternatives:")
@@ -150,6 +139,8 @@ def main():
 
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
+    src_filter()
+    dst_filter()
 
     window.mainloop()
 
