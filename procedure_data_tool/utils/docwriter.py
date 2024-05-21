@@ -42,7 +42,6 @@ class DocWriter():
                 jumper = (node.pit, node.jumper)
                 used_jumpers[jumper] = None
             used_pits[node.pit].add_node(node)
-        # for node in route:
         route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/POSition dependent")
         for node in route:
             if node.show:
@@ -81,12 +80,6 @@ class DocWriter():
             checklist3.add_run("Confirm open route: ").bold = True
             checklist3.add_run(pit.nace).bold = True
             checklist3.add_run("\n")
-        # for i in range(1,len(route)-2):
-        #     if (type(route[i]) == Valve3 or type(route[i]) == Valve2 ):
-        #         checklist3.add_run("\n")
-        #         checklist3.add_run(route[i].EIN())
-        #         checklist3.add_run("\t \t")
-        #         checklist3.add_run(route[i].position)
         checklist4 = self.makeSection("Checklist 4: Checklist 4 - Flush Transfer Route to Transfer Pump Valving","")
         checklist5 = self.makeSection("Checklist 5: Checklist 4 - Flush Transfer Route to Receiving Tank Valving","")
         checklist6 = self.makeSection("Checklist 6: Return to Transfer Valving","")

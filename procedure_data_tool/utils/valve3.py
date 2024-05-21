@@ -15,6 +15,8 @@ class Valve3(Valve):
             self.color = "skyblue"
         elif (dvi == "POS"):
             self.color = "red"
+        if (dvi == "NO"):
+            self.color = "#3F4049"
     
     def setPosition(self, route = None):
         for connection in self.connections:
@@ -31,4 +33,6 @@ class Valve3(Valve):
                             self.position = "BLOCK " + next_connection.EIN()
 
 
-
+    def findDVI(self, route):
+        self.dvi_used = True
+        return 

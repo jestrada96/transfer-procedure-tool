@@ -7,6 +7,12 @@ from tkinter import filedialog
 
 import os
 
+def find_dvi(route):
+    for element in route:
+        element.setPosition(route)
+        element.findDVI(route)
+    return route
+
 def find_routes(source, destination, alternatives = 1):
     src = source.get()
     dst = destination.get()
@@ -16,14 +22,12 @@ def find_routes(source, destination, alternatives = 1):
     except ValueError:
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
-    #route is found here:
     routes = components[src].routesTo(components[dst], alts)
     #change this to use a selected route from a list of route options instead!
     gr.makeGraph(components, routes[0])
     for route in routes:
-        for i in range(1,len(route)-2):
-            route[i].setPosition(route)
-        writer.buildDocument(route,pits)
+        full_route = find_dvi(route)
+        writer.buildDocument(full_route,pits)
     filename = src +"_to_"+ dst + ".docx"
     writer.save(filename)
     os.system(f'start {filename}')
@@ -151,5 +155,3 @@ def main():
 
 if __name__== '__main__':   
     main()
-
-# TO DO: FIGURE OUT DVI, FIGURE OUT SPLITS NECESSARY??

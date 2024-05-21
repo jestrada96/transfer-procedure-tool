@@ -9,6 +9,7 @@ class Node:
     position = None
     onJumper = True
     dvi_credited = None
+    dvi_used = False
     in_tank = False
     color = 'lightgray'
     def __init__(self, ein, pit, jumper):
@@ -21,6 +22,7 @@ class Node:
         self.show = True
         self.in_tank = False
         self.dvi_credited = None
+        self.dvi_used = False
         self.jumperLabel
         self.position
         self.onJumper
@@ -38,6 +40,9 @@ class Node:
     def setJumper(self, jumper):
         self.jumper = jumper
 
+    def findDVI(self, route):
+        return 
+    
     def setPosition(self, route = None):
         return
     
