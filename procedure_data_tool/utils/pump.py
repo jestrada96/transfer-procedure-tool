@@ -10,6 +10,6 @@ class Pump(Node):
         self.connections = []
         self.show = True
         self.dvi_credited 
-        self.dvi_used = False
+        self.dvi_used = "NO"
         self.in_tank = True
         self.color = "mediumpurple"

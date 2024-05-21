@@ -11,10 +11,12 @@ class Valve2(Valve):
         self.in_tank = False
         self.position = "CLOSED"
         self.dvi_credited = dvi
-        if (dvi == "YES"):
-            self.color = "skyblue"
 
     def setPosition(self, route = None):
-            self.position = "OPEN "
-
-        
+            self.position = "OPEN"
+    
+    def findDVI(self, route):
+        self.dvi_used = "YES"
+        self.color = "#A0A0A0"
+        return 
+    

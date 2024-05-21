@@ -24,10 +24,10 @@ def find_routes(source, destination, alternatives = 1):
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     routes = components[src].routesTo(components[dst], alts)
     #change this to use a selected route from a list of route options instead!
-    gr.makeGraph(components, routes[0])
     for route in routes:
         full_route = find_dvi(route)
         writer.buildDocument(full_route,pits)
+    gr.makeGraph(components, routes[0])
     filename = src +"_to_"+ dst + ".docx"
     writer.save(filename)
     os.system(f'start {filename}')

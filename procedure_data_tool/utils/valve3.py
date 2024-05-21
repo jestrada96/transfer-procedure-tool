@@ -27,14 +27,26 @@ class Valve3(Valve):
                             self.position = "BLOCK " + next_connection.EIN()
 
     def findDVI(self, route):
-        self.dvi_used = True
+        self.dvi_used = self.dvi_credited #CORRECT. ALWAYS
+        for connection in self.connections:
+            if connection in route:
+                pass
+            else:
+                if connection.EIN():
+                    route.append(connection)
+                else:
+                    for next_connection in connection.connections:
+                        if next_connection == self or next_connection in self.connections:
+                            pass
+                        else:
+                            route.append(next_connection)
         return 
     
     def getColor(self):
-        if (self.dvi_credited == "YES"):
+        if (self.dvi_used == "YES"):
             self.color = "skyblue"
-        elif (self.dvi_credited == "POS"):
+        elif (self.dvi_used == "POS"):
             self.color = "red"
-        if (self.dvi_credited == "NO"):
-            self.color = "#3F4049"
+        if (self.dvi_used == "NO"):
+            self.color = "#A0A0A0"
         return self.color

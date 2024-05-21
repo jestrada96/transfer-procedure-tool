@@ -9,7 +9,7 @@ class Node:
     position = None
     onJumper = True
     dvi_credited = None
-    dvi_used = False
+    dvi_used = None
     in_tank = False
     color = 'lightgray'
     def __init__(self, ein, pit, jumper):
@@ -22,7 +22,7 @@ class Node:
         self.show = True
         self.in_tank = False
         self.dvi_credited = None
-        self.dvi_used = False
+        self.dvi_used = None
         self.jumperLabel
         self.position
         self.onJumper
