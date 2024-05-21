@@ -46,6 +46,9 @@ class Node:
     def setPosition(self, route = None):
         return
     
+    def getColor(self):
+        return self.color
+
     def connectBack(self, node):
         if node in self.connections: return
         elif len(self.connections) < self.directions: self.connect(node)

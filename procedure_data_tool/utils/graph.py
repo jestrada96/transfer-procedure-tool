@@ -18,7 +18,7 @@ def makeGraph(inventory, route):
     #             G.add_edge(key, connection.ein)
 
     for node in G:
-        color_map.append(inventory[node].color)
+        color_map.append(inventory[node].getColor())
 
     pos = nx.planar_layout(G)  # Position nodes using the Fruchterman-Reingold force-directed algorithm
     nx.draw(G, pos, with_labels=True, node_size=80, node_color=color_map, font_size=9, font_color='black', edge_color='gray', linewidths=10)
