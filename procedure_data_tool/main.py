@@ -12,23 +12,22 @@ def find_dvi(route):
         element.setPosition(route)
     return route
 
-def find_routes(source, destination, alternatives = 3):
-    alts = 3
-    try:
-        alts = int(alternatives)
-    except ValueError:
-        messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
+def find_routes(source, destination, alts = 1):
     return components[source].routesTo(components[destination], alts)
 
 def create_route_options():
     global route_s
-    route_s= find_routes(source.get(), destination.get(), 3) 
+    try:
+        alts = int(alternatives.get())
+    except ValueError:
+        messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
+    route_s= find_routes(source.get(), destination.get(), alts) 
     refresh_listbox()
 
 def refresh_listbox():
     listbox.delete(0, tk.END)
     for i in range(len(route_s)):
-        listbox.insert(tk.END, route_s[i][0].ein+ "pip")
+        listbox.insert(tk.END, f"Option {i+1} from {route_s[i][0].ein} to {route_s[i][-1].ein}")
 
 def preview_graph(event):
     selection = listbox.curselection()
@@ -82,9 +81,9 @@ def load_new_file(*args):
 
 def main():
     window = tk.Tk()
-    window.title("Waste Transfer Procedure Data Tool")
+    window.title("Waste Transfer Procedure Tool")
     global file_path
-    file_path = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureDataFix.xlsx'
+    file_path = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'
     global components
     global pits 
     try: 
@@ -97,10 +96,10 @@ def main():
     global header_message 
     header_message = tk.StringVar()
     header_message.set("Using data from: "+ file_path)
-    label3 = tk.Label(window,    textvariable = header_message, wraplength=400, anchor="w")
+    label3 = tk.Label(window, textvariable = header_message, wraplength=480, anchor="w", justify= "left")
     label3.grid(row = 0, columnspan=3, rowspan=1, padx=10, pady=20,sticky = "w")
 
-    file_button = tk.Button(window, text= "Use a different file", command=lambda: load_new_file())
+    file_button = tk.Button(window, text= "Or use a different file", command=lambda: load_new_file())
     file_button.grid(row = 0, column = 3, padx= 10)
 
     global displayed_nodes 
@@ -117,9 +116,10 @@ def main():
     source = tk.StringVar(window)
     global src_dropdown
     src_dropdown = tk.OptionMenu(window, source, *displayed_nodes)
-    src_dropdown.grid(row=2, column= 2, pady=2)
+    src_dropdown.grid(row=2, column= 2, pady=2, sticky="w")
     global src_entry
-    src_entry = tk.Entry(window)
+    s = tk.StringVar(window, value= "AP01A-")
+    src_entry = tk.Entry(window, textvariable=s)
     src_entry.grid(row=2, column= 1, pady=5, padx=4, sticky="w")
 
     label1 = tk.Label(window, text="Select receiving tank (eg. TKR):")
@@ -129,7 +129,7 @@ def main():
     destination = tk.StringVar(window)
     global dst_dropdown
     dst_dropdown = tk.OptionMenu(window, destination, *displayed_nodes)
-    dst_dropdown.grid(row=3, column= 2, pady=2)
+    dst_dropdown.grid(row=3, column= 2, pady=2, sticky="w")
     global dst_entry
     dst_entry = tk.Entry(window)
     dst_entry.grid(row=3, column= 1, pady=5, padx=4, sticky="w")
@@ -138,27 +138,31 @@ def main():
     show_all = tk.BooleanVar()
     show_all.set(False)
 
-    checkbox = tk.Checkbutton(window, text="Include valves in source/receiving tank options.", variable=show_all, command = toggle_boolean, wraplength = 120, anchor = "w")
+    checkbox = tk.Checkbutton(window, text="Include valves in options", variable=show_all, command = toggle_boolean, anchor = "w")
     checkbox.grid(row=2, column=3)
 
     label2 = tk.Label(window, text="Number of route alternatives:")
-    label2.grid(row=5, column= 0, pady = 5, padx=10, sticky = "w")
+    label2.grid(row=3, column= 3, padx=2, sticky= '')
 
     global alternatives 
     alternatives = tk.Entry(window, width= 7, relief="groove")
     alternatives.insert(0, "1") 
-    alternatives.grid(row=5, column= 1, columnspan=1, padx=4, pady=2, sticky="w")
+    alternatives.grid(row=4, column= 3, padx = 2, sticky='')
 
-    find_routes_button = tk.Button(window, text="Find routes", command=lambda: create_route_options())
-    find_routes_button.grid(row=5, column= 2, padx = 10, pady=15)
-    make_document_button = tk.Button(window, text="Create procedure tool file", command=lambda: make_doc())
-    make_document_button.grid(row=5, column= 3, padx = 10, pady=15)
+
+    find_routes_button = tk.Button(window, text="Find route options", command=lambda: create_route_options())
+    find_routes_button.grid(row=5, column= 3, padx = 10, pady=15)
+    make_document_button = tk.Button(window, text="Create procedure development doc", command=lambda: make_doc())
+    make_document_button.grid(row=7, column= 3, padx = 10, pady=15)
+
+    label3 = tk.Label(window, text="Click route option to preview as graph")
+    label3.grid(row=6, column= 0)
 
     global listbox
     global listbox_index
     listbox_index = 0
     listbox = tk.Listbox(window, height=4)
-    listbox.grid(row=6, column= 1, columnspan=4, sticky="ew" )
+    listbox.grid(row=6, column= 1, columnspan=4, sticky="we", padx=20 )
 
     listbox.bind("<<ListboxSelect>>", preview_graph)
     src_entry.bind("<KeyRelease>", src_filter)
