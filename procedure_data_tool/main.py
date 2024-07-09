@@ -114,6 +114,7 @@ def main():
 
     global source
     source = tk.StringVar(window)
+    source.set(value="AP01A-PUMP")
     global src_dropdown
     src_dropdown = tk.OptionMenu(window, source, *displayed_nodes)
     src_dropdown.grid(row=2, column= 2, pady=2, sticky="w")
@@ -138,7 +139,7 @@ def main():
     show_all = tk.BooleanVar()
     show_all.set(False)
 
-    checkbox = tk.Checkbutton(window, text="Include valves in options", variable=show_all, command = toggle_boolean, anchor = "w")
+    checkbox = tk.Checkbutton(window, text="Select from all compoments", variable=show_all, command = toggle_boolean, anchor = "w")
     checkbox.grid(row=2, column=3)
 
     label2 = tk.Label(window, text="Number of route alternatives:")
@@ -154,7 +155,7 @@ def main():
     make_document_button = tk.Button(window, text="Create procedure development doc", command=lambda: make_doc())
     make_document_button.grid(row=8, column= 3, padx = 15, pady=15)
 
-    label3 = tk.Label(window, text="Click on a route option to preview as Graph")
+    label3 = tk.Label(window, text="Click on a route option to preview graph")
     label3.grid(row=6, column= 0, padx=15, sticky= "w")
 
     global graphing_algorithm 
