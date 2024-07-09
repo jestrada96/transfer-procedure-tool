@@ -34,7 +34,7 @@ def preview_graph(event):
     if selection:
         index = selection[0]
         if index<len(route_s):
-            gr.makeGraph(components, route_s[index])
+            gr.makeGraph(components, route_s[index], graphing_algorithm)
 
 def make_doc():
     src = source.get()
@@ -97,10 +97,10 @@ def main():
     header_message = tk.StringVar()
     header_message.set("Using data from: "+ file_path)
     label3 = tk.Label(window, textvariable = header_message, wraplength=480, anchor="w", justify= "left")
-    label3.grid(row = 0, columnspan=3, rowspan=1, padx=10, pady=20,sticky = "w")
+    label3.grid(row = 0, columnspan=3, rowspan=1, padx=15, pady=15,sticky = "w")
 
     file_button = tk.Button(window, text= "Or use a different file", command=lambda: load_new_file())
-    file_button.grid(row = 0, column = 3, padx= 10)
+    file_button.grid(row = 0, column = 3)
 
     global displayed_nodes 
     displayed_nodes = components.keys()
@@ -110,7 +110,7 @@ def main():
         dst_filter()
 
     label0 = tk.Label(window, text="Select source tank (eg. PUMP):")
-    label0.grid(row=2, column= 0, pady = 2, padx=10,sticky = "w")
+    label0.grid(row=2, column= 0, pady = 2, padx=15,sticky = "w")
 
     global source
     source = tk.StringVar(window)
@@ -123,7 +123,7 @@ def main():
     src_entry.grid(row=2, column= 1, pady=5, padx=4, sticky="w")
 
     label1 = tk.Label(window, text="Select receiving tank (eg. TKR):")
-    label1.grid(row=3, column= 0, pady = 2, padx=10, sticky = "w")
+    label1.grid(row=3, column= 0, pady = 2, padx=15, sticky = "w")
 
     global destination
     destination = tk.StringVar(window)
@@ -149,20 +149,28 @@ def main():
     alternatives.insert(0, "1") 
     alternatives.grid(row=4, column= 3, padx = 2, sticky='')
 
-
     find_routes_button = tk.Button(window, text="Find route options", command=lambda: create_route_options())
     find_routes_button.grid(row=5, column= 3, padx = 10, pady=15)
     make_document_button = tk.Button(window, text="Create procedure development doc", command=lambda: make_doc())
-    make_document_button.grid(row=7, column= 3, padx = 10, pady=15)
+    make_document_button.grid(row=8, column= 3, padx = 15, pady=15)
 
-    label3 = tk.Label(window, text="Click route option to preview as graph")
-    label3.grid(row=6, column= 0, padx=10 )
+    label3 = tk.Label(window, text="Click on a route option to preview as Graph")
+    label3.grid(row=6, column= 0, padx=15, sticky= "w")
+
+    global graphing_algorithm 
+    graphing_algorithm = tk.StringVar(window)
+    graphing_algorithm.set(value="Zig-zag")
+    label4 = tk.Label(window, text="Graph style: ")
+    label4.grid(row=7, column= 0, padx=15, sticky= "w")
+    
+    algorithm_dropdown = tk.OptionMenu(window, graphing_algorithm, "Zig-zag", "Pyramid", "Arch")
+    algorithm_dropdown.grid(row=7, column= 0, columnspan=1, sticky="e", padx=20 )
 
     global listbox
     global listbox_index
     listbox_index = 0
     listbox = tk.Listbox(window, height=4)
-    listbox.grid(row=6, column= 1, columnspan=4, sticky="we", padx=20 )
+    listbox.grid(row=6, column= 1, columnspan=4, sticky="we", padx=20, rowspan=2)
 
     listbox.bind("<<ListboxSelect>>", preview_graph)
     src_entry.bind("<KeyRelease>", src_filter)
