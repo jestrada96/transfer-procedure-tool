@@ -18,9 +18,7 @@ def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Tr
     sheet = wb["Pit Components"]
     pits = {}
 
-    rows = list(sheet.iter_rows(min_row=3, values_only=True))
-
-    for row in rows:
+    for row in sheet.iter_rows(min_row=3, values_only=True, max_row=150, max_col=26):
         pit = row[1]
         if pit not in pits:
             pits[pit] = Pit(
@@ -36,7 +34,7 @@ def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Tr
             pits[pit].update(
                 tfsps_transmitter=row[5], tfsps_pmid=row[6], 
                 annulus_leak_detector=row[11], annulus_leak_detector_pmid=row[12],
-                in_pit_heater=row[15], # ONLY ADD IFFFF they are there sheesh is this igonna make it so much slower??? do it fast
+                in_pit_heater=row[15],
             )
 
     component_types = {
@@ -57,7 +55,7 @@ def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Tr
     cnx = wb['Transfer Route Components']
     conections_matrix=cnx["F2:H400"]
 
-    for row in cnx.iter_rows(min_row=2, values_only= True):
+    for row in cnx.iter_rows(min_row=2, values_only= True, max_row=350, max_col=15):
         name = row[0]
         type = row[1]
         inventory[name] = component_types[type](name, pit = row[2], jumper = row[3], dvi = row[4])

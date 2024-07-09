@@ -57,7 +57,6 @@ class Node:
             print(type(self))
             for con in self.connections:
                 print(con.EIN())
-            # print(con.EIN() for con in self.connections)
         return
 
     def connect(self, *nodes):
@@ -71,7 +70,6 @@ class Node:
                     for connection in self.connections:
                         print(connection.EIN())
 
-    # def addToPit():
     def report(self):
         print((self.EIN()), "connections: ")
         for node in self.connections:
