@@ -36,12 +36,12 @@ class DocWriter():
         used_pits = OrderedDict()
         used_jumpers = OrderedDict()
         for node in route:
-            if node.pit in pits:
-                used_pits[node.pit] = pits[node.pit]
+            if node.pit and node.pit in pits:
+                used_pits[node.pit] = pits[node.pit] #dictuionary of node pit objects matched to their names
+                used_pits[node.pit].add_used_component(node)
             if node.onJumper:
                 jumper = (node.pit, node.jumper)
                 used_jumpers[jumper] = None
-            used_pits[node.pit].add_node(node)
         route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/POSition dependent")
         for node in route:
             if node.show:
@@ -49,15 +49,15 @@ class DocWriter():
                 route_list.add_run(node.EIN())
         heaterEINs = self.makeSection("Section 5.5.3 heaters: " ,"Replace existing data with the following:")
         for pit in used_pits.values():
-            for heater in pit.heaters:
-                heaterEINs.add_run("\n")      
+            for heater in pit.in_pit_heaters:
+                heaterEINs.add_run("\n")
                 heaterEINs.add_run(heater)
-                heaterEINs.add_run("\t \t")
-                heaterEINs.add_run(pit.nacePMID)
+                heaterEINs.add_run("\t \t")      
+                heaterEINs.add_run(pit.pit_nace)
         pits5179 = self.makeSection("Steps 5.17.9: ","Replace existing data with the following:")
         for pit in used_pits.values():
             pits5179.add_run("\n")
-            pits5179.add_run(pit.label)
+            pits5179.add_run(pit.tsr_structure)
         checklist1 = self.makeSection("Checklist 1: ","Replace list with:")
         for jumper in used_jumpers:
             checklist1.add_run("\n")
@@ -68,17 +68,18 @@ class DocWriter():
         checklist3 = self.makeSection("*IN DEVELOPMENT* Checklist 3: Transfer Valving","")
         for pit in used_pits.values():
             checklist3.add_run("\n")
-            checklist3.add_run(pit.nace[0:6]).bold = True
+            # checklist3.add_run(pit.pit_nace[0:6]).bold = True
+            checklist3.add_run(pit.pit_nace).bold = True
             checklist3.add_run(" Tank Farm").bold = True
-            for node in pit.nodes:
-                if (type(node) == Valve3 or type(node) == Valve2 ):
+            for component in pit.components:
+                if (type(component) == Valve3 or type(component) == Valve2 ):
                     checklist3.add_run("\n")
-                    checklist3.add_run(node.EIN())
+                    checklist3.add_run(component.EIN())
                     checklist3.add_run("\t \t")
-                    checklist3.add_run(node.position)
+                    checklist3.add_run(component.position)
             checklist3.add_run("\n")
             checklist3.add_run("Confirm open route: ").bold = True
-            checklist3.add_run(pit.nace).bold = True
+            checklist3.add_run(pit.pit_nace).bold = True
             checklist3.add_run("\n")
         checklist4 = self.makeSection("Checklist 4: Checklist 4 - Flush Transfer Route to Transfer Pump Valving","")
         checklist5 = self.makeSection("Checklist 5: Checklist 4 - Flush Transfer Route to Receiving Tank Valving","")
@@ -86,7 +87,7 @@ class DocWriter():
         checklist7LD = self.makeSection("Checklist 7 - Tank pit/Structure Leak Detection")
         checklist7TF = self.makeSection("Checklist 7 - TFSPS Temperature Equipment Checks")
         for pit in used_pits.values():
-            for tfsps , pmid in zip(pit.tfsps,pit.tfsps_pmid):
+            for tfsps , pmid in zip(pit.tfsps_transmitters, pit.tfsps_pmids):
                 checklist7TF.add_run("\n")
                 checklist7TF.add_run(tfsps)
                 checklist7TF.add_run("\t \t")
@@ -94,17 +95,15 @@ class DocWriter():
         checklist7D = self.makeSection("Checklist 7 - Drain Seal Assemblies:")
         for pit in used_pits.values():
             checklist7D.add_run("\n")
-            checklist7D.add_run(pit.label)
-            checklist7D.add_run(" ")
-            checklist7D.add_run(pit.drain)
+            checklist7D.add_run(pit.drain_seal_location)
             checklist7D.add_run("\t \t")
-            checklist7D.add_run(pit.drainSealPos)
+            checklist7D.add_run(pit.drain_seal_position)
         checklist7N = self.makeSection("Checklist 7 - NACE Inspection:")
         for pit in used_pits.values():
             checklist7N.add_run("\n")
-            checklist7N.add_run(pit.nace)
+            checklist7N.add_run(pit.pit_nace)
             checklist7N.add_run("\t \t")
-            checklist7N.add_run(pit.nacePMID)
+            checklist7N.add_run(pit.pit_nace_pmid)
 
 
 

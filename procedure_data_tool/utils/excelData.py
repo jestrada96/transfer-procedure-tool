@@ -1,68 +1,66 @@
-globals().clear()
 from openpyxl import load_workbook
 from procedure_data_tool.utils.valve import Valve
 from procedure_data_tool.utils.valve2 import Valve2
+from procedure_data_tool.utils.nozzle import Nozzle
+from procedure_data_tool.utils.line import Line
 from procedure_data_tool.utils.valve3 import Valve3
 from procedure_data_tool.utils.split import Split
 from procedure_data_tool.utils.pump import Pump
 from procedure_data_tool.utils.tankreturn import TankReturn
 from procedure_data_tool.utils.pit import Pit
 
-def importComponents(filepath = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'):
+def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureDataFix.xlsx'):
     try:
-        wb = load_workbook(filename = filepath, data_only=True)
+        wb = load_workbook(filename=filepath, data_only=True)
     except FileNotFoundError as e:
         raise e
+
+    sheet = wb["Pit Components"]
     pits = {}
-    for row in wb["Pits"].iter_rows(min_row=3, values_only= True):
+
+    rows = list(sheet.iter_rows(min_row=3, values_only=True))
+
+    for row in rows:
         pit = row[1]
-        nace = row[2]
-        nacePMID = row[3]
-        label = row[4]
-        drain = row[5]
-        drainSealPos = row[6]
-        pits[pit] = Pit(pit, nace, nacePMID, label, drain, drainSealPos)
-
-    for row in wb["Heaters"].iter_rows(min_row=3, values_only= True):
-        heater = row[1]
-        pit_name = row[2]
-        if heater:
-            pits[pit_name].heaters.append(heater)
-
-    for row in wb["Encasement Drain Valves"].iter_rows(min_row=3, values_only= True):
-        pit_name = row[1]
-        valve = row[2]
-        position = row[3]
-        pits[pit_name].encasementDrainValve.append(valve)
-        pits[pit_name].edvPos.append(position)
-
-    for row in wb["TFSPS PMIDs"].iter_rows(min_row=3, values_only= True):
-        pit_name = row[3]
-        tfsps = row[1]
-        tfsps_pmid = row[2]
-        pits[pit_name].tfsps.append(tfsps)
-        pits[pit_name].tfsps_pmid.append(tfsps_pmid)  
+        if pit not in pits:
+            pits[pit] = Pit(
+                name=pit, leak_detector_id=row[2], leak_detector_pmid=row[3],
+                leak_detector_tfsps=row[4], tfsps_transmitter=row[5],
+                tfsps_pmid=row[6], drain_seal_location=row[7],
+                drain_seal_position=row[8], annulus_leak_detector=row[11],
+                annulus_leak_detector_pmid=row[12], pit_nace=row[13],
+                pit_nace_pmid=row[14], in_pit_heater=row[15],
+                tfmcs=row[16], tsr_structure=row[17]
+            )
+        else:
+            pits[pit].update(
+                tfsps_transmitter=row[5], tfsps_pmid=row[6], 
+                annulus_leak_detector=row[11], annulus_leak_detector_pmid=row[12],
+                in_pit_heater=row[15], # ONLY ADD IFFFF they are there sheesh is this igonna make it so much slower??? do it fast
+            )
 
     component_types = {
-            "2-Way-Valve": Valve2,
-            "3-Way-Valve": Valve3,
-            "Split Point": Split,
-            "Pump": Pump,
-            "": Valve,
-            "Tank Return": TankReturn,
-            None: Valve 
+        "2-Way-Valve": Valve2,
+        "3-Way-Valve": Valve3,
+        "Tee Fitting": Split,
+        "Split Point": Split,
+        "Pump": Pump,
+        "Transfer Line": Line,
+        "Nozzle": Nozzle,
+        "": Valve,
+        "Tank Return": TankReturn,
+        None: Valve
     }
 
-    #key = EIN, value = component object
     inventory = {}
 
-    cnx = wb['Connections']
-    conections_matrix=cnx["G3:I200"]
+    cnx = wb['Transfer Route Components']
+    conections_matrix=cnx["F2:H400"]
 
-    for row in cnx.iter_rows(min_row=3, values_only= True):
-        name = row[1]
-        type = row[2]
-        inventory[name] = component_types[type](name, pit = row[3], jumper = row[4], dvi = row[5])
+    for row in cnx.iter_rows(min_row=2, values_only= True):
+        name = row[0]
+        type = row[1]
+        inventory[name] = component_types[type](name, pit = row[2], jumper = row[3], dvi = row[4])
 
     for component, connections in zip(inventory.values(), conections_matrix):
         for connection in connections:
@@ -73,5 +71,4 @@ def importComponents(filepath = '//hanford/data/sitedata/WasteTransferEng/Waste 
     return inventory, pits
 
 
-        
-                    
+importComponents()
