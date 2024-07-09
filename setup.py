@@ -15,6 +15,7 @@ setup(
         'python-docx',
         'networkx',
         'matplotlib',
+        'indexed',
     ],
     include_package_data=True,
 )
