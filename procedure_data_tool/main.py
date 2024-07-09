@@ -10,32 +10,43 @@ import os
 def find_dvi(route):
     for element in route:
         element.setPosition(route)
-        # element.findDVI(route)
     return route
 
-def find_routes(source, destination, alternatives = 1):
-    alts = 1
+def find_routes(source, destination, alternatives = 3):
+    alts = 3
     try:
         alts = int(alternatives)
     except ValueError:
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
     return components[source].routesTo(components[destination], alts)
-    
+
+def create_route_options():
+    global route_s
+    route_s= find_routes(source.get(), destination.get(), 3) 
+    refresh_listbox()
+
+def refresh_listbox():
+    listbox.delete(0, tk.END)
+    for i in range(len(route_s)):
+        listbox.insert(tk.END, route_s[i][0].ein+ "pip")
+
+def preview_graph(event):
+    selection = listbox.curselection()
+    if selection:
+        index = selection[0]
+        if index<len(route_s):
+            gr.makeGraph(components, route_s[index])
+
 def make_doc():
     src = source.get()
     dst = destination.get()
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     filename = src +"_to_"+ dst + ".docx"
-    writer.buildDocument(full_route,pits)
-    # change this to use a selected route from a list of route options instead!
-    for route in route_s:
-        full_route = find_dvi(route)
-    os.system(f'start {filename}')
+    # for route in route_s:
+    #     full_route = find_dvi(route)
+    writer.buildDocument(route_s[listbox_index], pits)
     writer.save(filename)
-    
-def preview_graph():
-    # find_routes(source.get(),destination.get(),1)
-    gr.makeGraph(components, find_routes(source.get(),destination.get(),1)[0])
+    os.system(f'start {filename}')
 
 def src_filter(*args):
     query = src_entry.get().lower() 
@@ -76,8 +87,6 @@ def main():
     file_path = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureDataFix.xlsx'
     global components
     global pits 
-    global route_s 
-    route_s = []
     try: 
         components, pits =  ex.importComponents(file_path)
     except Exception as e:
@@ -139,12 +148,19 @@ def main():
     alternatives = tk.Entry(window, width= 7, relief="groove")
     alternatives.insert(0, "1") 
     alternatives.grid(row=5, column= 1, columnspan=1, padx=4, pady=2, sticky="w")
-   
-    preview_route_button = tk.Button(window, text="Preview route", command=lambda: preview_graph())
-    preview_route_button.grid(row=5, column= 2, padx = 10, pady=15)
+
+    find_routes_button = tk.Button(window, text="Find routes", command=lambda: create_route_options())
+    find_routes_button.grid(row=5, column= 2, padx = 10, pady=15)
     make_document_button = tk.Button(window, text="Create procedure tool file", command=lambda: make_doc())
     make_document_button.grid(row=5, column= 3, padx = 10, pady=15)
 
+    global listbox
+    global listbox_index
+    listbox_index = 0
+    listbox = tk.Listbox(window, height=4)
+    listbox.grid(row=6, column= 1, columnspan=4, sticky="ew" )
+
+    listbox.bind("<<ListboxSelect>>", preview_graph)
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
     src_filter()
