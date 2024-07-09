@@ -16,6 +16,7 @@ setup(
         'networkx',
         'matplotlib',
         'indexed',
+        'scipy',
     ],
     include_package_data=True,
 )
