@@ -14,24 +14,28 @@ def find_dvi(route):
     return route
 
 def find_routes(source, destination, alternatives = 1):
-    src = source.get()
-    dst = destination.get()
     alts = 1
     try:
         alts = int(alternatives)
     except ValueError:
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
-    writer = DocWriter(src + " to " + dst + " draft procedure data:")
-    routes = components[src].routesTo(components[dst], alts)
-    # change this to use a selected route from a list of route options instead!
-    for route in routes:
-        full_route = find_dvi(route)
-        writer.buildDocument(full_route,pits)
-    gr.makeGraph(components, routes[0])
-    filename = src +"_to_"+ dst + ".docx"
-    writer.save(filename)
-    os.system(f'start {filename}')
+    return components[source].routesTo(components[destination], alts)
     
+def make_doc():
+    src = source.get()
+    dst = destination.get()
+    writer = DocWriter(src + " to " + dst + " draft procedure data:")
+    filename = src +"_to_"+ dst + ".docx"
+    writer.buildDocument(full_route,pits)
+    # change this to use a selected route from a list of route options instead!
+    for route in route_s:
+        full_route = find_dvi(route)
+    os.system(f'start {filename}')
+    writer.save(filename)
+    
+def preview_graph():
+    # find_routes(source.get(),destination.get(),1)
+    gr.makeGraph(components, find_routes(source.get(),destination.get(),1)[0])
 
 def src_filter(*args):
     query = src_entry.get().lower() 
@@ -72,6 +76,8 @@ def main():
     file_path = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureDataFix.xlsx'
     global components
     global pits 
+    global route_s 
+    route_s = []
     try: 
         components, pits =  ex.importComponents(file_path)
     except Exception as e:
@@ -134,8 +140,10 @@ def main():
     alternatives.insert(0, "1") 
     alternatives.grid(row=5, column= 1, columnspan=1, padx=4, pady=2, sticky="w")
    
-    find_routes_button = tk.Button(window, text="Find routes", command=lambda: find_routes(source, destination, alternatives.get()))
-    find_routes_button.grid(row=5, column= 3, padx = 10, pady=15)
+    preview_route_button = tk.Button(window, text="Preview route", command=lambda: preview_graph())
+    preview_route_button.grid(row=5, column= 2, padx = 10, pady=15)
+    make_document_button = tk.Button(window, text="Create procedure tool file", command=lambda: make_doc())
+    make_document_button.grid(row=5, column= 3, padx = 10, pady=15)
 
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
