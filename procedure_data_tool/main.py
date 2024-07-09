@@ -156,7 +156,7 @@ def main():
     make_document_button.grid(row=7, column= 3, padx = 10, pady=15)
 
     label3 = tk.Label(window, text="Click route option to preview as graph")
-    label3.grid(row=6, column= 0)
+    label3.grid(row=6, column= 0, padx=10 )
 
     global listbox
     global listbox_index
