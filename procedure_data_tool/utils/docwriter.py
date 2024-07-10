@@ -52,9 +52,11 @@ class DocWriter():
         wlps_text.add_run("\n")
         sending_tank = used_pits.values()[0].tsr_structure[:-3] + "1" + used_pits.values()[0].tsr_structure[-3:-1]
         receiving_tank = used_pits.values()[-1].tsr_structure[:-3] + "1" + used_pits.values()[-1].tsr_structure[-3:-1]
-        wlps_text.add_run(f"Waste from tank {sending_tank} will be transferred using {route[0]}, ")
-        # wlps_text.add_run(f"routed through {} jumpers, SN-611, APVP jumpers, SN-612, and AP02A jumpers ")
-        wlps_text.add_run(f"finally discharging into {receiving_tank} head space through the drop leg at {route[-1]} ")
+        wlps_text.add_run(f"Waste from tank {sending_tank} will be transferred using {route[0]}, routed through ")
+        for pit, line in zip(used_pits,used_lines):
+            wlps_text.add_run(f"{pit} jumpers, ")
+            wlps_text.add_run(f"{line.ein[-6:]}, ")    
+        wlps_text.add_run(f" finally discharging into tank {receiving_tank} head space through the drop leg at {route[-1]}.")
         route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/POSition dependent")
         for node in route:
             if node.show:
@@ -82,8 +84,7 @@ class DocWriter():
         for pit in used_pits.values():
             checklist3.add_run("\n")
             # checklist3.add_run(pit.pit_nace[0:6]).bold = True
-            checklist3.add_run(pit.pit_nace).bold = True
-            checklist3.add_run(" Tank Farm").bold = True
+            checklist3.add_run(f"{pit.pit_nace} Tank Farm").bold = True
             for component in pit.components:
                 if (type(component) == Valve3 or type(component) == Valve2 ):
                     checklist3.add_run("\n")
@@ -91,8 +92,7 @@ class DocWriter():
                     checklist3.add_run("\t \t")
                     checklist3.add_run(component.position)
             checklist3.add_run("\n")
-            checklist3.add_run("Confirm open route: ").bold = True
-            checklist3.add_run(pit.pit_nace).bold = True
+            checklist3.add_run(f"Confirm open route: {pit.pit_nace} From {pit.components[0]} to {pit.components[-1]}").bold = True
             checklist3.add_run("\n")
         checklist4 = self.makeSection("Checklist 4: Checklist 4 - Flush Transfer Route to Transfer Pump Valving","")
         checklist5 = self.makeSection("Checklist 5: Checklist 4 - Flush Transfer Route to Receiving Tank Valving","")
