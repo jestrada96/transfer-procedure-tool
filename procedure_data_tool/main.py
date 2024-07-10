@@ -69,7 +69,7 @@ def main():
     window = tk.Tk()
     window.title("Waste Transfer Procedure Data Tool")
     global file_path
-    file_path = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureDataFix.xlsx'
+    file_path = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'
     global components
     global pits 
     try: 

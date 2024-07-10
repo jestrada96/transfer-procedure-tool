@@ -9,7 +9,7 @@ from procedure_data_tool.utils.pump import Pump
 from procedure_data_tool.utils.tankreturn import TankReturn
 from procedure_data_tool.utils.pit import Pit
 
-def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureDataFix.xlsx'):
+def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'):
     try:
         wb = load_workbook(filename=filepath, data_only=True)
     except FileNotFoundError as e:
