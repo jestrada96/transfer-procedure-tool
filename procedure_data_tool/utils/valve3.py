@@ -44,9 +44,9 @@ class Valve3(Valve):
     
     def getColor(self):
         if (self.dvi_used == "YES"):
-            self.color = "skyblue"
+            self.color = "steelblue"
         elif (self.dvi_used == "POS"):
-            self.color = "red"
+            self.color = "indianred"
         if (self.dvi_used == "NO"):
-            self.color = "#A0A0A0"
+            self.color = "lightgray"
         return self.color

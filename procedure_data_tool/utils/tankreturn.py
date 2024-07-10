@@ -12,7 +12,7 @@ class TankReturn(Node):
         self.dvi_credited 
         self.dvi_used = False
         self.in_tank = True
-        self.color = "limegreen"
+        self.color = "lightgreen"
 
         # HAVE EIN OUTPUT JUST THE LABEL (Last character)
         def EIN(self):

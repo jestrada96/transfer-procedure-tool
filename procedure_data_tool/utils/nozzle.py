@@ -12,4 +12,4 @@ class Nozzle(Node):
         self.dvi_credited 
         self.dvi_used = "NO"
         self.in_tank = False
-        self.color = "mediumpurple"
+        self.color = "dimgray"

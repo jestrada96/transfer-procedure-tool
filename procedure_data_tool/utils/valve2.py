@@ -17,6 +17,6 @@ class Valve2(Valve):
     
     def findDVI(self, route):
         self.dvi_used = "YES"
-        self.color = "#A0A0A0"
+        self.color = "lightgray"
         return 
     
