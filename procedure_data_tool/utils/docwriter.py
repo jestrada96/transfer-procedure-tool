@@ -47,7 +47,6 @@ class DocWriter():
             if (type(node) == Line):
                 used_lines.append(node)
 
-        # Add rest of components in route.
         wlps_text = self.makeSection("Route Description: ", "use description for Waste Leak Path Screen")
         wlps_text.add_run("\n")
         sending_tank = used_pits.values()[0].tsr_structure[:-3] + "1" + used_pits.values()[0].tsr_structure[-3:-1]
@@ -61,7 +60,7 @@ class DocWriter():
         for node in route:
             if node.show:
                 route_list.add_run("\n")
-                route_list.add_run(node.EIN())
+                route_list.add_run(node.EIN()) ## What is show?
         heaterEINs = self.makeSection("Section 5.5.3 heaters: " ,"Replace existing data with the following:")
         for pit in used_pits.values():
             for heater in pit.in_pit_heaters:

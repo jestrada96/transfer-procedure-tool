@@ -14,6 +14,6 @@ class TankReturn(Node):
         self.in_tank = True
         self.color = "lightgreen"
 
-        # HAVE EIN OUTPUT JUST THE LABEL (Last character)
+        # HAVE EIN OUTPUT JUST THE LABEL (Last character)?
         def EIN(self):
-            return None
+            return self.ein[-1]

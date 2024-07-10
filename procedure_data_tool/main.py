@@ -41,8 +41,6 @@ def make_doc():
     dst = destination.get()
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     filename = src +"_to_"+ dst + ".docx"
-    # for route in route_s:
-    #     full_route = find_dvi(route)
     writer.buildDocument(route_s[listbox_index], pits)
     writer.save(filename)
     os.system(f'start {filename}')
