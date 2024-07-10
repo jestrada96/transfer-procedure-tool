@@ -4,7 +4,7 @@ import procedure_data_tool.utils.graph as gr
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
-
+from tkinter import ttk
 import os
 
 def find_dvi(route):
@@ -41,8 +41,6 @@ def make_doc():
     dst = destination.get()
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     filename = src +"_to_"+ dst + ".docx"
-    # for route in route_s:
-    #     full_route = find_dvi(route)
     writer.buildDocument(route_s[listbox_index], pits)
     writer.save(filename)
     os.system(f'start {filename}')
@@ -93,86 +91,99 @@ def main():
         messagebox.showwarning("Warning", filewarning)
         components, pits =  ex.importComponents(browse_file())
     
-    global header_message 
-    header_message = tk.StringVar()
-    header_message.set("Using data from: "+ file_path)
-    label3 = tk.Label(window, textvariable = header_message, wraplength=480, anchor="w", justify= "left")
-    label3.grid(row = 0, columnspan=3, rowspan=1, padx=15, pady=15,sticky = "w")
-
-    file_button = tk.Button(window, text= "Or use a different file", command=lambda: load_new_file())
-    file_button.grid(row = 0, column = 3)
-
     global displayed_nodes 
     displayed_nodes = components.keys()
-
+    
     def toggle_boolean(*args):
         src_filter()
         dst_filter()
+    #######################################################################################################################
+    row_index = 0
+    global header_message 
+    header_message = tk.StringVar()
+    header_message.set("Using data from: "+ file_path)
+    label3 = tk.Label(window, textvariable = header_message, wraplength=500, anchor="w", justify= "left")
+    label3.grid(row = row_index, columnspan=3, rowspan=1, padx=15, pady=2,sticky = "w")
+    file_button = tk.Button(window, text= "Or use a different file", command=lambda: load_new_file(), relief="raised")
+    file_button.grid(row = row_index, column = 3, padx= 15)
+    row_index += 1
+    sep = tk.ttk.Separator(window, orient='horizontal')
+    sep.grid(row = row_index, column = 0,sticky="ew", columnspan = 4)
+    row_index += 1
+    #######################################################################################################################
+    global show_all
+    show_all = tk.BooleanVar(value=False)
+    checkbox = tk.Checkbutton(window, text="Make all components available for selection (valves, nozzles, etc)", variable=show_all, command = toggle_boolean, anchor = "w")
+    checkbox.grid(row=row_index, column=0, padx=15, sticky="w")
 
-    label0 = tk.Label(window, text="Select source tank (eg. PUMP):")
-    label0.grid(row=2, column= 0, pady = 2, padx=15,sticky = "w")
-
+    row_index += 1
+    #######################################################################################################################
+    label0 = tk.Label(window, text="1. Select source tank (eg. PUMP):")
+    label0.grid(row=row_index, column= 0, pady = 2, padx=15,sticky = "w")
+    global src_entry
+    s = tk.StringVar(window, value= "AP01A-")
+    src_entry = tk.Entry(window, textvariable=s)
+    src_entry.grid(row=row_index, column= 2, pady=5, padx=15, sticky="w")
     global source
     source = tk.StringVar(window)
     source.set(value="AP01A-PUMP")
     global src_dropdown
     src_dropdown = tk.OptionMenu(window, source, *displayed_nodes)
-    src_dropdown.grid(row=2, column= 2, pady=2, sticky="w")
-    global src_entry
-    s = tk.StringVar(window, value= "AP01A-")
-    src_entry = tk.Entry(window, textvariable=s)
-    src_entry.grid(row=2, column= 1, pady=5, padx=4, sticky="w")
+    src_dropdown.grid(row=row_index, column= 3, pady=2, sticky="w")
 
-    label1 = tk.Label(window, text="Select receiving tank (eg. TKR):")
-    label1.grid(row=3, column= 0, pady = 2, padx=15, sticky = "w")
-
+    row_index += 1
+    #######################################################################################################################
+    label1 = tk.Label(window, text="2. Select receiving tank (eg. TKR):")
+    label1.grid(row=row_index, column= 0, pady = 2, padx=15, sticky = "w")
+    global dst_entry
+    dst_entry = tk.Entry(window)
+    dst_entry.grid(row=row_index, column= 2, pady=15, padx=15, sticky="w")
     global destination
     destination = tk.StringVar(window)
     global dst_dropdown
-    dst_dropdown = tk.OptionMenu(window, destination, *displayed_nodes)
-    dst_dropdown.grid(row=3, column= 2, pady=2, sticky="w")
-    global dst_entry
-    dst_entry = tk.Entry(window)
-    dst_entry.grid(row=3, column= 1, pady=5, padx=4, sticky="w")
+    dst_dropdown = tk.OptionMenu(window, destination, *displayed_nodes, )
+    dst_dropdown.grid(row=row_index, column= 3, pady=2, padx=15, sticky="w")
 
-    global show_all
-    show_all = tk.BooleanVar()
-    show_all.set(False)
-
-    checkbox = tk.Checkbutton(window, text="Select from all compoments", variable=show_all, command = toggle_boolean, anchor = "w")
-    checkbox.grid(row=2, column=3)
-
+    row_index += 1
+    #######################################################################################################################
+    find_routes_button = tk.Button(window, text="3. Generate route options", command=lambda: create_route_options(), relief="raised")
+    find_routes_button.grid(row=row_index, column= 0, padx=13, pady=10, sticky= "w")
     label2 = tk.Label(window, text="Number of route alternatives:")
-    label2.grid(row=3, column= 3, padx=2, sticky= '')
-
+    label2.grid(row=row_index, column= 2, padx=2, sticky= '')
     global alternatives 
-    alternatives = tk.Entry(window, width= 7, relief="groove")
+    alternatives = tk.Entry(window, width= 7, relief="raised")
     alternatives.insert(0, "1") 
-    alternatives.grid(row=4, column= 3, padx = 2, sticky='')
+    alternatives.grid(row=row_index, column= 3, padx = 2, sticky='')
 
-    find_routes_button = tk.Button(window, text="Find route options", command=lambda: create_route_options())
-    find_routes_button.grid(row=5, column= 3, padx = 10, pady=15)
-    make_document_button = tk.Button(window, text="Create procedure development doc", command=lambda: make_doc())
-    make_document_button.grid(row=8, column= 3, padx = 15, pady=15)
+    row_index += 1
+    sep = tk.ttk.Separator(window, orient='horizontal')
+    sep.grid(row = row_index, column = 0,sticky="ew", columnspan = 4)
 
-    label3 = tk.Label(window, text="Click on a route option to preview graph")
-    label3.grid(row=6, column= 0, padx=15, sticky= "w")
-
-    global graphing_algorithm 
-    graphing_algorithm = tk.StringVar(window)
-    graphing_algorithm.set(value="Zig-zag")
-    label4 = tk.Label(window, text="Graph style: ")
-    label4.grid(row=7, column= 0, padx=15, sticky= "w")
-    
-    algorithm_dropdown = tk.OptionMenu(window, graphing_algorithm, "Zig-zag", "Pyramid", "Arch")
-    algorithm_dropdown.grid(row=7, column= 0, columnspan=1, sticky="e", padx=20 )
-
+    row_index += 1
+    #######################################################################################################################
+    label3 = tk.Label(window, text="4. Click on a route option to preview graph")
+    label3.grid(row=row_index, column= 0, padx=15, sticky= "w")
     global listbox
     global listbox_index
     listbox_index = 0
     listbox = tk.Listbox(window, height=4)
-    listbox.grid(row=6, column= 1, columnspan=4, sticky="we", padx=20, rowspan=2)
+    listbox.grid(row=row_index, column= 1, columnspan=4, sticky="we", padx=20, pady=15, rowspan=2)
 
+    row_index +=1
+    #######################################################################################################################
+    global graphing_algorithm 
+    graphing_algorithm = tk.StringVar(window)
+    graphing_algorithm.set(value="Zig-zag")
+    label4 = tk.Label(window, text="Graph style (optional): ")
+    label4.grid(row=row_index, column= 0, padx=18, sticky= "w")
+    algorithm_dropdown = tk.OptionMenu(window, graphing_algorithm, "Zig-zag", "Pyramid", "Arch")
+    algorithm_dropdown.grid(row=row_index, column= 0, columnspan=1, padx=20 )
+    
+    row_index += 1
+    #######################################################################################################################
+    make_document_button = tk.Button(window, text="5. Generate procedure development doc", command=lambda: make_doc(), relief="raised")
+    make_document_button.grid(row=row_index, column= 0, padx = 13, pady=15, sticky="w")
+    
     listbox.bind("<<ListboxSelect>>", preview_graph)
     src_entry.bind("<KeyRelease>", src_filter)
     dst_entry.bind("<KeyRelease>", dst_filter)
