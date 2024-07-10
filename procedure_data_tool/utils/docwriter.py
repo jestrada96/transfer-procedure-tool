@@ -4,6 +4,7 @@ from docx.shared import Pt
 from docx.shared import RGBColor
 from procedure_data_tool.utils.valve2 import Valve2
 from procedure_data_tool.utils.valve3 import Valve3
+from procedure_data_tool.utils.line import Line
 
 class DocWriter():
     def __init__(self, name="MyDoc"):
@@ -35,6 +36,7 @@ class DocWriter():
     def buildDocument(self, route, pits):
         used_pits = IndexedOrderedDict()
         used_jumpers = IndexedOrderedDict()
+        used_lines = []
         for node in route:
             if node.pit and node.pit in pits:
                 used_pits[node.pit] = pits[node.pit] 
@@ -42,15 +44,17 @@ class DocWriter():
             if node.onJumper:
                 jumper = (node.pit, node.jumper)
                 used_jumpers[jumper] = None
+            if (type(node) == Line):
+                used_lines.append(node)
 
-        # Add tank instead of TSR_Structure. Edit string??
         # Add rest of components in route.
-        # make list of "lines used?" I will use them eventually!!!
         wlps_text = self.makeSection("Route Description: ", "use description for Waste Leak Path Screen")
         wlps_text.add_run("\n")
-        wlps_text.add_run(f"Waste from {used_pits.values()[0].tsr_structure} will be transferred using {route[0]}, ")
+        sending_tank = used_pits.values()[0].tsr_structure[:-3] + "1" + used_pits.values()[0].tsr_structure[-3:-1]
+        receiving_tank = used_pits.values()[-1].tsr_structure[:-3] + "1" + used_pits.values()[-1].tsr_structure[-3:-1]
+        wlps_text.add_run(f"Waste from tank {sending_tank} will be transferred using {route[0]}, ")
         # wlps_text.add_run(f"routed through {} jumpers, SN-611, APVP jumpers, SN-612, and AP02A jumpers ")
-        wlps_text.add_run(f"finally discharging into {used_pits.values()[1].tsr_structure} AW-102 head space through the drop leg at AP-02A's {route[-1]} ")
+        wlps_text.add_run(f"finally discharging into {receiving_tank} head space through the drop leg at {route[-1]} ")
         route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/POSition dependent")
         for node in route:
             if node.show:
