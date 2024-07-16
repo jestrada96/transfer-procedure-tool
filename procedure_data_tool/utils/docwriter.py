@@ -4,6 +4,7 @@ from docx.shared import Pt
 from docx.shared import RGBColor
 from procedure_data_tool.utils.valve2 import Valve2
 from procedure_data_tool.utils.valve3 import Valve3
+from procedure_data_tool.utils.line import Line
 
 class DocWriter():
     def __init__(self, name="MyDoc"):
@@ -35,6 +36,7 @@ class DocWriter():
     def buildDocument(self, route, pits):
         used_pits = IndexedOrderedDict()
         used_jumpers = IndexedOrderedDict()
+        used_lines = []
         for node in route:
             if node.pit and node.pit in pits:
                 used_pits[node.pit] = pits[node.pit] 

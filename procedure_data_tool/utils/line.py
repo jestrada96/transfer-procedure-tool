@@ -12,4 +12,5 @@ class Line(Node):
         self.dvi_credited 
         self.dvi_used = "NO"
         self.in_tank = False
+        self.onJumper = False
         self.color = "lightsteelblue"
