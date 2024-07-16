@@ -44,6 +44,7 @@ class DocWriter():
             if node.onJumper:
                 jumper = (node.pit, node.jumper)
                 used_jumpers[jumper] = None
+            #
             if (type(node) == Line):
                 used_lines.append(node)
 
