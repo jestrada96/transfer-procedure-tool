@@ -49,8 +49,13 @@ class DocWriter():
         # Add rest of components in route.
         wlps_text = self.makeSection("Route Description: ", "use description for Waste Leak Path Screen")
         wlps_text.add_run("\n")
-        wlps_text.add_run(f"Waste from {used_pits.values()[0].tsr_structure} will be transferred using {route[0]}, ")
-        wlps_text.add_run(f"finally discharging into {used_pits.values()[1].tsr_structure} AW-102 head space through the drop leg at AP-02A's {route[-1]} ")
+        sending_tank = used_pits.values()[0].tsr_structure[:-3] + "1" + used_pits.values()[0].tsr_structure[-3:-1]
+        receiving_tank = used_pits.values()[-1].tsr_structure[:-3] + "1" + used_pits.values()[-1].tsr_structure[-3:-1]
+        wlps_text.add_run(f"Waste from tank {sending_tank} will be transferred using {route[0]}, routed through ")
+        for pit, line in zip(used_pits,used_lines):
+            wlps_text.add_run(f"{pit} jumpers, ")
+            wlps_text.add_run(f"{line.ein[-6:]}, ")    
+        wlps_text.add_run(f" finally discharging into tank {receiving_tank}'s head space through the drop leg at {route[-1]}.")
         route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/POSition dependent")
         for node in route:
             if node.show:
