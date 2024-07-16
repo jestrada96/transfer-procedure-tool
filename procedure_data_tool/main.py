@@ -27,7 +27,7 @@ def create_route_options():
 def refresh_listbox():
     listbox.delete(0, tk.END)
     for i in range(len(route_s)):
-        listbox.insert(tk.END, f"Option {i+1} from {route_s[i][0].ein} to {route_s[i][-1].ein}")
+        listbox.insert(tk.END, f"Option {i+1}: {route_s[i][0].ein} to {route_s[i][-1].ein}. {len(route_s[i])} Components")
 
 def preview_graph(event):
     selection = listbox.curselection()
@@ -129,7 +129,7 @@ def main():
     source.set(value="AP01A-PUMP")
     global src_dropdown
     src_dropdown = tk.OptionMenu(window, source, *displayed_nodes)
-    src_dropdown.grid(row=row_index, column= 3, pady=2, sticky="w")
+    src_dropdown.grid(row=row_index, column= 3, pady=2, padx=15, sticky="w")
 
     row_index += 1
     #######################################################################################################################
@@ -148,12 +148,12 @@ def main():
     #######################################################################################################################
     find_routes_button = tk.Button(window, text="3. Generate route options", command=lambda: create_route_options(), relief="raised")
     find_routes_button.grid(row=row_index, column= 0, padx=13, pady=10, sticky= "w")
-    label2 = tk.Label(window, text="Number of route alternatives:")
-    label2.grid(row=row_index, column= 2, padx=2, sticky= '')
+    label2 = tk.Label(window, text="Number of route alternatives (optional):")
+    label2.grid(row=row_index, column= 2, padx=6, sticky= 'e')
     global alternatives 
     alternatives = tk.Entry(window, width= 7, relief="raised")
     alternatives.insert(0, "1") 
-    alternatives.grid(row=row_index, column= 3, padx = 2, sticky='')
+    alternatives.grid(row=row_index, column= 3, padx=15, sticky='w')
 
     row_index += 1
     sep = tk.ttk.Separator(window, orient='horizontal')
@@ -167,7 +167,7 @@ def main():
     global listbox_index
     listbox_index = 0
     listbox = tk.Listbox(window, height=4)
-    listbox.grid(row=row_index, column= 1, columnspan=4, sticky="we", padx=20, pady=15, rowspan=2)
+    listbox.grid(row=row_index, column= 1, columnspan=5, sticky="we", padx=15, pady=15, rowspan=2)
 
     row_index +=1
     #######################################################################################################################

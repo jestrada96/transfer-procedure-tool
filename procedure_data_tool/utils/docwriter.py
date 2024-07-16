@@ -45,11 +45,9 @@ class DocWriter():
 
         # Add tank instead of TSR_Structure. Edit string??
         # Add rest of components in route.
-        # make list of "lines used?" I will use them eventually!!!
         wlps_text = self.makeSection("Route Description: ", "use description for Waste Leak Path Screen")
         wlps_text.add_run("\n")
         wlps_text.add_run(f"Waste from {used_pits.values()[0].tsr_structure} will be transferred using {route[0]}, ")
-        # wlps_text.add_run(f"routed through {} jumpers, SN-611, APVP jumpers, SN-612, and AP02A jumpers ")
         wlps_text.add_run(f"finally discharging into {used_pits.values()[1].tsr_structure} AW-102 head space through the drop leg at AP-02A's {route[-1]} ")
         route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/POSition dependent")
         for node in route:
