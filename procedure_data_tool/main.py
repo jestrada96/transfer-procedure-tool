@@ -14,7 +14,7 @@ def process_route(route):
         element.setPosition(route)
         route_with_dvi.append(element)
         if type(element) == Valve3:
-            route_with_dvi.append(element.getDVI())
+            route_with_dvi.extend(element.getDVI())
     return route_with_dvi
 
 def find_routes(source, destination, alts = 1):

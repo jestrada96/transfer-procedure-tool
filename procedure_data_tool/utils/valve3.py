@@ -56,13 +56,13 @@ class Valve3(Valve):
                 if connection == caller or connection == self.blocked_element:
                     pass
                 else:
-                    dvi_items.append(connection.linkDVI(caller = self))
+                    dvi_items.extend(connection.linkDVI(caller = self))
         elif self.dvi_credited == "NO":
             for connection in self.connections:
                 if connection == caller:
                     pass
                 else:
-                    dvi_items.append(connection.linkDVI(caller = self))
+                    dvi_items.extend(connection.linkDVI(caller = self))
         else:
             pass
         return dvi_items
@@ -70,7 +70,7 @@ class Valve3(Valve):
     def getDVI(self):
         dvi_elements = []
         if self.blocked_element:
-            dvi_elements.append(self.blocked_element.linkDVI(caller = self))
+            dvi_elements.extend(self.blocked_element.linkDVI(caller = self))
         if dvi_elements:
             self.dvi_used = self.dvi_credited 
         else:

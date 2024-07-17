@@ -46,7 +46,7 @@ class Node:
             if connection == caller:
                 pass
             else: 
-                dvi_items.append(connection.linkDVI(caller = self))
+                dvi_items.extend(connection.linkDVI(caller = self))
         if len(dvi_items) == 1:
             return []
         return dvi_items
