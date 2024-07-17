@@ -13,4 +13,4 @@ class Nozzle(Node):
         self.dvi_used = "NO"
         self.in_tank = False
         self.color = "gray"
-        self.size = 20
+        self.size = 10
