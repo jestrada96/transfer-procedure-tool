@@ -2,6 +2,7 @@ from procedure_data_tool.utils.valve import Valve
 
 class Valve3(Valve):
     directions = 3
+    blocked_element = None
     def __init__(self, ein, pit = None, jumper = None, jumperLabel = None, dvi = None):
         super().__init__(ein, pit= pit, jumper = jumper)
         self.directions = 3
@@ -11,16 +12,18 @@ class Valve3(Valve):
         self.in_tank = False
         self.position
         self.dvi_credited = dvi
+        self.blocked_element
 
     def setPosition(self, route = None):
         for connection in self.connections:
             if connection in route:
                 pass
             else:
+                self.blocked_element = connection
                 if connection.EIN():
-                    self.position = "BLOCK " +  connection.EIN()
+                    self.position = "BLOCK " +  self.blocked_element.EIN()
                 else:
-                    for next_connection in connection.connections:
+                    for next_connection in self.blocked_element.connections:
                         if next_connection == self or next_connection in self.connections:
                             pass
                         else:

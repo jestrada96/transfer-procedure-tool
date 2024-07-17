@@ -41,7 +41,8 @@ def make_doc():
     dst = destination.get()
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     filename = src +"_to_"+ dst + ".docx"
-    writer.buildDocument(route_s[listbox_index], pits)
+    #Temporarily use find_dvi here
+    writer.buildDocument(find_dvi(route_s[listbox_index]), pits)
     writer.save(filename)
     os.system(f'start {filename}')
 
@@ -52,7 +53,6 @@ def src_filter(*args):
         if node:
             if (query in node.lower() and (components[node].in_tank or show_all.get())):
                 src_dropdown['menu'].add_command(label=node, command=tk._setit(source, node))
-
 
 def dst_filter(*args):
     query = dst_entry.get().lower() 
