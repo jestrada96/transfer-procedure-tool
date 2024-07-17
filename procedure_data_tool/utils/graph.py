@@ -22,14 +22,13 @@ def makeGraph(inventory, route, layout_type='Kamada Kawai'):
     }
 
     color_legend = {
-        "Transfer Line" : "lightsteelblue",
+        "Transfer Line" : "white",
         "Tank Return / Dropleg" : "lightgreen",
         "Pump" : "mediumpurple",
-        "Pit Nozzle" : "dimgray",
+        "Pit Nozzle" : "gray",
         "DVI Valve" : "steelblue",
         "Position-Dependent DVI Valve" : "indianred",
         "Non-DVI Valve" : "lightgray",
-        
     }
     try:
         pos = layout_functions[layout_type.get()](G)

@@ -13,4 +13,4 @@ class Line(Node):
         self.dvi_used = "NO"
         self.in_tank = False
         self.onJumper = False
-        self.color = "lightsteelblue"
+        self.color = "white"
