@@ -17,3 +17,8 @@ class TankReturn(Node):
         # HAVE EIN OUTPUT JUST THE LABEL (Last character)?
         def EIN(self):
             return self.ein[-1]
+
+        def linkDVI(self, caller = None):
+            dvi_items = []
+            return dvi_items
+

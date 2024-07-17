@@ -13,3 +13,7 @@ class Pump(Node):
         self.dvi_used = "NO"
         self.in_tank = True
         self.color = "mediumpurple"
+
+        def linkDVI(self, caller = None):
+            dvi_items = []
+            return dvi_items

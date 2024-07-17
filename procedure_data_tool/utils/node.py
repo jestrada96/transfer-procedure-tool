@@ -40,10 +40,18 @@ class Node:
     def setJumper(self, jumper):
         self.jumper = jumper
 
-    def findDVI(self, route):
-        return 
+    def linkDVI(self, caller = None):
+        dvi_items = [self]
+        for connection in self.connections:
+            if connection == caller:
+                pass
+            else: 
+                dvi_items.append(connection.linkDVI(caller = self))
+        if len(dvi_items) == 1:
+            return []
+        return dvi_items
     
-    def setPosition(self, route = None):
+    def setPosition(self, route = None, forced = None):
         return
     
     def getColor(self):

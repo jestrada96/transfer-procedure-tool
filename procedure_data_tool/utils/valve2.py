@@ -12,11 +12,16 @@ class Valve2(Valve):
         self.position = "CLOSED"
         self.dvi_credited = dvi
 
-    def setPosition(self, route = None):
-            self.position = "OPEN"
+    def setPosition(self, route = None, forced = None):
+            if forced == "CLOSED":
+                self.position = "CLOSED"
+            else: 
+                self.position = "OPEN"
     
-    def findDVI(self, route):
+    def linkDVI(self, caller = None):
+        self.setPosition(forced = "CLOSED")
         self.dvi_used = "YES"
-        self.color = "lightgray"
-        return 
+        self.color = "steelblue"
+        dvi_items = [self]
+        return dvi_items
     
