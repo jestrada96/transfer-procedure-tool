@@ -36,7 +36,7 @@ class Valve3(Valve):
         self.setBlockedElement(route=route)
         self.markPosition()
 
-    def linkDVI(self, caller=None):
+    def linkDVI(self, caller=None, stop = False):
         dvi_items = []
         self.dvi_used = self.dvi_credited
         if self.dvi_credited == "YES":

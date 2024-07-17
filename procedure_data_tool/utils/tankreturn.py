@@ -18,7 +18,7 @@ class TankReturn(Node):
         def EIN(self):
             return self.ein[-1]
 
-        def linkDVI(self, caller = None):
+        def linkDVI(self, caller = None, stop = False):
             dvi_items = []
             return dvi_items
 

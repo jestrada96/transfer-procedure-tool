@@ -2,6 +2,7 @@ from procedure_data_tool.utils.docwriter import DocWriter
 import procedure_data_tool.utils.excelData as ex
 import procedure_data_tool.utils.graph as gr
 from procedure_data_tool.utils.valve3 import Valve3
+from procedure_data_tool.utils.split import Split
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
@@ -13,7 +14,7 @@ def process_route(route):
     for element in route:
         element.setPosition(route)
         route_with_dvi.append(element)
-        if type(element) == Valve3:
+        if type(element) == Valve3 or type(element) == Split:
             route_with_dvi.extend(element.getDVI())
     return route_with_dvi
 
