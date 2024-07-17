@@ -1,4 +1,5 @@
 from procedure_data_tool.utils.valve import Valve
+from procedure_data_tool.utils.split import Split
 
 class Valve2(Valve):
     directions = 2
@@ -18,10 +19,14 @@ class Valve2(Valve):
             else: 
                 self.position = "OPEN"
     
-    def linkDVI(self, caller = None):
+    def linkDVI(self, caller = None, stop = False):
+        dvi_items = [self]
+        if type(caller) == Split and not stop:
+             for connection in self.connections:
+                  if connection != caller:
+                       dvi_items.extend(connection.linkDVI(caller=self))
         self.setPosition(forced = "CLOSED")
         self.dvi_used = "YES"
         self.color = "steelblue"
-        dvi_items = [self]
         return dvi_items
     

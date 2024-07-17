@@ -40,7 +40,7 @@ class Node:
     def setJumper(self, jumper):
         self.jumper = jumper
 
-    def linkDVI(self, caller = None):
+    def linkDVI(self, caller = None, stop = False):
         dvi_items = [self]
         for connection in self.connections:
             if connection == caller:
