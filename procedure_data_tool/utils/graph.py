@@ -5,7 +5,7 @@ def makeGraph(inventory, route, layout_type='Kamada Kawai'):
     G = nx.Graph()
 
     color_map = []
-
+    size_map = []
     for component in route:
         if component:
             G.add_node(component.ein)
@@ -14,7 +14,10 @@ def makeGraph(inventory, route, layout_type='Kamada Kawai'):
     
     for node in G:
         color_map.append(inventory[node].getColor())
+        size_map.append(inventory[node].size)
 
+    size_map[0] = 300
+    size_map[-1] = 300
     layout_functions = {
         "Pyramid": nx.planar_layout,
         "Arch" : nx.spectral_layout,
@@ -37,7 +40,7 @@ def makeGraph(inventory, route, layout_type='Kamada Kawai'):
     
     fig = plt.figure()
     plt.title = "Route Preview"
-    nx.draw(G, pos, with_labels=True, node_size=80, node_color=color_map, font_size=9, font_color='black', edge_color='gray', linewidths=10)
+    nx.draw(G, pos, with_labels=True, node_size= size_map, node_color=color_map, font_size=9, font_color='black', edge_color='gray', linewidths=10)
 
     legend_handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10) for color in color_legend.values()]
     legend_labels = [key for key in color_legend.keys()]

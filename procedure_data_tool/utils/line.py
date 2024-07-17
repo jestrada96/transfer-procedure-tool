@@ -14,3 +14,4 @@ class Line(Node):
         self.in_tank = False
         self.onJumper = False
         self.color = "white"
+        self.size = 20

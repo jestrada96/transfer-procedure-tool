@@ -11,6 +11,6 @@ class Split(Node):
         self.in_tank = False
         self.onJumper = False
         self.color = "white"
-        
+    
     def EIN(self):
         return None

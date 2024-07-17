@@ -12,6 +12,7 @@ class Node:
     dvi_used = None
     in_tank = False
     color = 'lightgray'
+    size = 50
     def __init__(self, ein, pit, jumper):
         self.ein = ein
         self.pit = pit
@@ -27,7 +28,8 @@ class Node:
         self.position
         self.onJumper
         self.color
-
+        # self.size
+    
     def EIN(self):
         return self.ein
     
