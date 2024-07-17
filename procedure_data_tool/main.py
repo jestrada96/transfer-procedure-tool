@@ -40,7 +40,7 @@ def preview_graph(event):
         index = selection[0]
         if index<len(route_s):
             route_with_dvi = process_route(route_s[listbox_index])
-            gr.makeGraph(components, route_s[index], graphing_algorithm)
+            gr.makeGraph(components, route_with_dvi, route_s[index], graphing_algorithm)
 
 def make_doc():
     src = source.get()
