@@ -23,11 +23,15 @@ def find_routes(source, destination, alts = 1):
 
 def create_route_options():
     global route_s
+    global route_d
+    route_d = []
     try:
         alts = int(alternatives.get())
     except ValueError:
         messagebox.showwarning("Warning", "Valid number of alternatives not specified, showing shortest route available.")
     route_s= find_routes(source.get(), destination.get(), alts) 
+    for route in route_s:
+        route_d.append(process_route(route))
     refresh_listbox()
 
 def refresh_listbox():
@@ -40,19 +44,22 @@ def preview_graph(event):
     if selection:
         index = selection[0]
         if index<len(route_s):
-            route_with_dvi = process_route(route_s[listbox_index])
-            gr.makeGraph(components, route_with_dvi, route_s[index], graphing_algorithm)
+            gr.makeGraph(components, route_d[index], route_s[index], graphing_algorithm)
 
 def make_doc():
     src = source.get()
     dst = destination.get()
     writer = DocWriter(src + " to " + dst + " draft procedure data:")
     filename = src +"_to_"+ dst + ".docx"
-
-    #Temporarily use process_route here
-    writer.buildDocument(route_s[listbox_index], pits)
-    writer.save(filename)
-    os.system(f'start {filename}')
+    writer.buildDocument(route_s[listbox_index], route_d[listbox_index], pits)
+    try:
+        writer.save(filename)
+        os.system(f'start {filename}')
+    except PermissionError as e:
+        if e.errno == 13:
+            messagebox.showerror("Error", f"The file '{filename}' might be open or in use. Please close the file and try again.")
+        else:
+            raise
 
 def src_filter(*args):
     query = src_entry.get().lower() 
@@ -134,7 +141,7 @@ def main():
     src_entry.grid(row=row_index, column= 2, pady=5, padx=15, sticky="w")
     global source
     source = tk.StringVar(window)
-    source.set(value="AP01A-PUMP")
+    source.set(value="AP03A-PUMP")
     global src_dropdown
     src_dropdown = tk.OptionMenu(window, source, *displayed_nodes)
     src_dropdown.grid(row=row_index, column= 3, pady=2, padx=15, sticky="w")
@@ -148,6 +155,7 @@ def main():
     dst_entry.grid(row=row_index, column= 2, pady=15, padx=15, sticky="w")
     global destination
     destination = tk.StringVar(window)
+    destination.set(value="AY01A-TKR-D")
     global dst_dropdown
     dst_dropdown = tk.OptionMenu(window, destination, *displayed_nodes, )
     dst_dropdown.grid(row=row_index, column= 3, pady=2, padx=15, sticky="w")

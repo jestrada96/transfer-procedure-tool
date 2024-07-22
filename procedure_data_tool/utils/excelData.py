@@ -24,17 +24,17 @@ def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Tr
             pits[pit] = Pit(
                 name=pit, leak_detector_id=row[2], leak_detector_pmid=row[3],
                 leak_detector_tfsps=row[4], tfsps_transmitter=row[5],
-                tfsps_pmid=row[6], drain_seal_location=row[7],
-                drain_seal_position=row[8], annulus_leak_detector=row[11],
-                annulus_leak_detector_pmid=row[12], pit_nace=row[13],
-                pit_nace_pmid=row[14], in_pit_heater=row[15],
-                tfmcs=row[16], tsr_structure=row[17]
+                tfsps_pmid=row[6], drain_seal_location=row[7], drain_seal_name=[8],
+                drain_seal_position=row[9], annulus_leak_detector=row[12],
+                annulus_leak_detector_pmid=row[13], pit_nace=row[14],
+                pit_nace_pmid=row[15], in_pit_heater=row[16],
+                tfmcs=row[17], tsr_structure=row[18]
             )
         else:
             pits[pit].update(
                 tfsps_transmitter=row[5], tfsps_pmid=row[6], 
-                annulus_leak_detector=row[11], annulus_leak_detector_pmid=row[12],
-                in_pit_heater=row[15],
+                annulus_leak_detector=row[12], annulus_leak_detector_pmid=row[13],
+                in_pit_heater=row[16],
             )
 
     component_types = {

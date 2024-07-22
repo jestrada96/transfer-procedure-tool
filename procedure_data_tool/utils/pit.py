@@ -1,7 +1,7 @@
 class Pit:
     def __init__(self, name, leak_detector_id=None, leak_detector_pmid=None,
                  leak_detector_tfsps=None, tfsps_transmitter=None, tfsps_pmid=None,
-                 drain_seal_location=None, drain_seal_position=None,
+                 drain_seal_location=None, drain_seal_name = None, drain_seal_position=None,
                  annulus_leak_detector=None, annulus_leak_detector_pmid=None,
                  pit_nace=None, pit_nace_pmid=None, in_pit_heater=None,
                  tfmcs=None, tsr_structure=None):
@@ -13,6 +13,7 @@ class Pit:
         self.tfsps_transmitters = [tfsps_transmitter] if tfsps_transmitter else []
         self.tfsps_pmids = [tfsps_pmid] if tfsps_pmid else []
         self.drain_seal_location = drain_seal_location
+        self.drain_seal_name = drain_seal_name
         self.drain_seal_position = drain_seal_position
         self.annulus_leak_detectors = [annulus_leak_detector] if annulus_leak_detector else []
         self.annulus_leak_detector_pmids = [annulus_leak_detector_pmid] if annulus_leak_detector_pmid else []

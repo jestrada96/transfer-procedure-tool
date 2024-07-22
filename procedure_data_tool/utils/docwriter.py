@@ -33,37 +33,37 @@ class DocWriter():
     def save(self, filename= "PrintedRoute.docx"):
         self.doc.save(filename)
 
-    def buildDocument(self, route, pits):
+    def buildDocument(self, simple_route, dvi_route, pits):
         used_pits = IndexedOrderedDict()
+        directly_used_pits = IndexedOrderedDict()
         used_jumpers = IndexedOrderedDict()
         used_lines = []
-        for node in route:
-            if node.pit and node.pit in pits:
-                used_pits[node.pit] = pits[node.pit] 
-                used_pits[node.pit].add_used_component(node)
-            if node.onJumper:
-                jumper = (node.pit, node.jumper)
+        directly_used_lines = []
+        for component in simple_route:
+            if component.pit and component.pit in pits:
+                directly_used_pits[component.pit] = pits[component.pit] 
+            if (type(component) == Line):
+                directly_used_lines.append(component)            
+        for component in dvi_route:
+            if component.pit and component.pit in pits:
+                used_pits[component.pit] = pits[component.pit] 
+                used_pits[component.pit].add_used_component(component)
+            if component.onJumper:
+                jumper = (component.pit, component.jumper)
                 used_jumpers[jumper] = None
             #
-            if (type(node) == Line):
-                used_lines.append(node)
-
-        # Add tank instead of TSR_Structure. Edit string??
-        # Add rest of components in route.
+            if (type(component) == Line):
+                used_lines.append(component)
         wlps_text = self.makeSection("Route Description: ", "use description for Waste Leak Path Screen")
         wlps_text.add_run("\n")
-        sending_tank = used_pits.values()[0].tsr_structure[:-3] + "1" + used_pits.values()[0].tsr_structure[-3:-1]
-        receiving_tank = used_pits.values()[-1].tsr_structure[:-3] + "1" + used_pits.values()[-1].tsr_structure[-3:-1]
-        wlps_text.add_run(f"Waste from tank {sending_tank} will be transferred using {route[0]}, routed through ")
-        for pit, line in zip(used_pits,used_lines):
+        sending_tank = used_pits.values()[0].tsr_structure[:-3] + "1" + directly_used_pits.values()[0].tsr_structure[-3:-1]
+        receiving_tank = used_pits.values()[-1].tsr_structure[:-3] + "1" + directly_used_pits.values()[-1].tsr_structure[-3:-1]
+        wlps_text.add_run(f"Waste from tank {sending_tank} will be transferred using {simple_route[0]}, routed through ")
+        for pit, line in zip(directly_used_pits, directly_used_lines):
             wlps_text.add_run(f"{pit} jumpers, ")
             wlps_text.add_run(f"{line.ein[-6:]}, ")    
-        wlps_text.add_run(f" finally discharging into tank {receiving_tank}'s head space through the drop leg at {route[-1]}.")
-        route_list = self.makeSection("Valves in Route (reference only): ", "DVI Credited YES/NO/POSition dependent")
-        for node in route:
-            if node.show:
-                route_list.add_run("\n")
-                route_list.add_run(node.EIN())
+        wlps_text.add_run(f" finally discharging into tank {receiving_tank}'s head space through the drop leg at {simple_route[-1]}.")
+        procedure_development_data = self.makeSection("Procedure Development Data")
         heaterEINs = self.makeSection("Section 5.5.3 heaters: " ,"Replace existing data with the following:")
         for pit in used_pits.values():
             for heater in pit.in_pit_heaters:
@@ -74,18 +74,16 @@ class DocWriter():
         pits5179 = self.makeSection("Steps 5.17.9: ","Replace existing data with the following:")
         for pit in used_pits.values():
             pits5179.add_run("\n")
-            pits5179.add_run(pit.tsr_structure)
+            pits5179.add_run(pit.drain_seal_location)
         checklist1 = self.makeSection("Checklist 1: ","Replace list with:")
         for jumper in used_jumpers:
             checklist1.add_run("\n")
             checklist1.add_run(jumper[0])
             checklist1.add_run("\t \t \t")
-            checklist1.add_run("Jumper: ").font.bold = True
-            checklist1.add_run(jumper[1])
-        checklist3 = self.makeSection("*IN DEVELOPMENT* Checklist 3: Transfer Valving","")
+            checklist1.add_run(f"Jumper: {jumper[1]} ")
+        checklist3 = self.makeSection("Checklist 3: Transfer Valving","")
         for pit in used_pits.values():
             checklist3.add_run("\n")
-            # checklist3.add_run(pit.pit_nace[0:6]).bold = True
             checklist3.add_run(pit.pit_nace).bold = True
             checklist3.add_run(" Tank Farm").bold = True
             for component in pit.components:
@@ -103,7 +101,7 @@ class DocWriter():
             checklist3.add_run(f"FROM {pit.components[0]} TO {pit.components[-1]}")
             checklist3.add_run("\n")
         checklist4 = self.makeSection("Checklist 4: Checklist 4 - Flush Transfer Route to Transfer Pump Valving","")
-        checklist5 = self.makeSection("Checklist 5: Checklist 4 - Flush Transfer Route to Receiving Tank Valving","")
+        checklist5 = self.makeSection("Checklist 5: Checklist 5 - Flush Transfer Route to Receiving Tank Valving","")
         checklist6 = self.makeSection("Checklist 6: Return to Transfer Valving","")
         checklist7LD = self.makeSection("Checklist 7 - Tank pit/Structure Leak Detection")
         checklist7TF = self.makeSection("Checklist 7 - TFSPS Temperature Equipment Checks")
@@ -125,6 +123,11 @@ class DocWriter():
             checklist7N.add_run(pit.pit_nace)
             checklist7N.add_run("\t \t")
             checklist7N.add_run(pit.pit_nace_pmid)
+        # route_list = self.makeSection("SECD Route List: ")
+        # for node in dvi_route:
+        #     if node.show:
+        #         route_list.add_run("\n")
+        #         route_list.add_run(node.EIN())
 
 
 

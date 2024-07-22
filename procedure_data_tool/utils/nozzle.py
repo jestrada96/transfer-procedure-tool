@@ -14,3 +14,4 @@ class Nozzle(Node):
         self.in_tank = False
         self.color = "gray"
         self.size = 10
+        self.onJumper = False
