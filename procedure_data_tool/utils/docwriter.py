@@ -94,9 +94,13 @@ class DocWriter():
                     checklist3.add_run(component.EIN())
                     checklist3.add_run("\t \t")
                     checklist3.add_run(component.position)
+                    if (component.dvi_used == "YES" or component.dvi_used == "POS"):
+                        checklist3.add_run("\t ")
+                        checklist3.add_run("(Mark as DVI)").bold = True
             checklist3.add_run("\n")
-            checklist3.add_run("Confirm open route: ").bold = True
-            checklist3.add_run(pit.pit_nace).bold = True
+            checklist3.add_run(f"Confirm open route: ({pit.pit_nace}) ").bold = True
+            checklist3.add_run("\n")
+            checklist3.add_run(f"FROM {pit.components[0]} TO {pit.components[-1]}")
             checklist3.add_run("\n")
         checklist4 = self.makeSection("Checklist 4: Checklist 4 - Flush Transfer Route to Transfer Pump Valving","")
         checklist5 = self.makeSection("Checklist 5: Checklist 4 - Flush Transfer Route to Receiving Tank Valving","")

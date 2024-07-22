@@ -12,6 +12,7 @@ class Valve2(Valve):
         self.in_tank = False
         self.position = "CLOSED"
         self.dvi_credited = dvi
+        self.dvi_used = "NO"
 
     def setPosition(self, route = None, forced = None):
             if forced == "CLOSED":
