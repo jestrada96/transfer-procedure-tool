@@ -114,6 +114,18 @@ def main():
         dst_filter()
     #######################################################################################################################
     row_index = 0
+    current_dir = os.path.dirname(__file__)
+    logo_path = os.path.join(current_dir, "utils", "WRPS_LOGO.png")
+    logo = tk.PhotoImage(file=logo_path)
+    logo_small = logo.subsample(24,24)
+    logo_label = tk.Label(window, image = logo_small)
+    logo_label.grid(row= row_index, column = 3, sticky= "w", padx= 15)
+    row_index += 1
+    sep = tk.ttk.Separator(window, orient='horizontal')
+    sep.grid(row = row_index, column = 0,sticky="ew", columnspan = 4)
+    row_index += 1
+    #######################################################################################################################
+    row_index += 1
     global header_message 
     header_message = tk.StringVar()
     header_message.set("Using data from: "+ file_path)
