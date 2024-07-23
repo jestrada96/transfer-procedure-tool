@@ -98,7 +98,13 @@ class DocWriter():
             checklist3.add_run("\n")
             checklist3.add_run(f"Confirm open route: ({pit.pit_nace}) ").bold = True
             checklist3.add_run("\n")
-            checklist3.add_run(f"FROM {pit.components[0].field_label} TO {pit.components[-1].field_label}")
+            checklist3.add_run(f"FROM \n").bold = True
+            checklist3.add_run(pit.components[0].field_label)
+            checklist3.add_run(f"\nTO\n").bold = True
+            if pit.components[-1].field_label:
+                checklist3.add_run(pit.components[-1].field_label)
+            else:
+                checklist3.add_run(pit.components[-1].ein)
             checklist3.add_run("\n")
         checklist4 = self.makeSection("Checklist 4: Checklist 4 - Flush Transfer Route to Transfer Pump Valving","")
         checklist5 = self.makeSection("Checklist 5: Checklist 5 - Flush Transfer Route to Receiving Tank Valving","")
