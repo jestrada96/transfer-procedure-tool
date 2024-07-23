@@ -3,8 +3,8 @@ from procedure_data_tool.utils.split import Split
 
 class Valve2(Valve):
     directions = 2
-    def __init__(self, ein, pit = None, jumper = None, jumperLabel = None, dvi = None):
-        super().__init__(ein, pit= pit, jumper = jumper) 
+    def __init__(self, ein, pit = None, jumper = None, field_label = None, dvi = None):
+        super().__init__(ein, pit= pit, jumper = jumper, field_label= field_label) 
         self.ein = ein
         self.directions = 2 
         self.connections = []

@@ -3,8 +3,8 @@ from procedure_data_tool.utils.valve import Valve
 class Valve3(Valve):
     directions = 3
     blocked_element = None
-    def __init__(self, ein, pit = None, jumper = None, jumperLabel = None, dvi = None):
-        super().__init__(ein, pit= pit, jumper = jumper)
+    def __init__(self, ein, pit = None, jumper = None, field_label = None, dvi = None):
+        super().__init__(ein, pit= pit, jumper = jumper, field_label= field_label)
         self.directions = 3
         self.ein = ein
         self.connections = []

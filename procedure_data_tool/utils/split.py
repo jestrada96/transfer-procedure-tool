@@ -3,8 +3,8 @@ from procedure_data_tool.utils.node import Node
 class Split(Node):
     directions = 3
     branching_element = None
-    def __init__(self, ein, pit = None, jumper = None, jumperLabel = None, dvi = None):
-        super().__init__(ein, pit, jumper)
+    def __init__(self, ein, pit = None, jumper = None, field_label = None, dvi = None):
+        super().__init__(ein, pit, jumper, field_label= field_label)
         self.directions = 3; 
         self.ein = ein
         self.connections = []

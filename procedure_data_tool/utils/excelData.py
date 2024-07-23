@@ -58,7 +58,8 @@ def importComponents(filepath='//hanford/data/sitedata/WasteTransferEng/Waste Tr
     for row in cnx.iter_rows(min_row=2, values_only= True, max_row=350, max_col=15):
         name = row[0]
         type = row[1]
-        inventory[name] = component_types[type](name, pit = row[2], jumper = row[3], dvi = row[4])
+        inventory[name] = component_types[type](name, pit = row[2], jumper = row[3], 
+                                                dvi = row[4], field_label = row[12])
 
     for component, connections in zip(inventory.values(), conections_matrix):
         for connection in connections:

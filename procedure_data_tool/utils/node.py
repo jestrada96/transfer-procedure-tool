@@ -13,10 +13,12 @@ class Node:
     in_tank = False
     color = 'lightgray'
     size = 50
-    def __init__(self, ein, pit, jumper):
+    field_label = None
+    def __init__(self, ein, pit, jumper, field_label):
         self.ein = ein
         self.pit = pit
         self.jumper = jumper
+        self.field_label = field_label
         self.directions
         self.connections
         # self.dvi_used
