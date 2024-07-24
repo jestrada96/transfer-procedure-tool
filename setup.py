@@ -17,6 +17,7 @@ setup(
         'matplotlib',
         'indexed',
         'scipy',
+        'ttkthemes'
     ],
     include_package_data=True,
 )

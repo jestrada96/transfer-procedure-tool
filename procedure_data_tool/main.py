@@ -7,6 +7,8 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import ttk
+from ttkthemes import ThemedStyle
+
 import os
 
 def process_route(route):
@@ -95,6 +97,8 @@ def load_new_file(*args):
 def main():
     window = tk.Tk()
     window.title("Waste Transfer Procedure Tool")
+    style = ThemedStyle(window)
+    style.set_theme("breeze")
     global file_path
     file_path = '//hanford/data/sitedata/WasteTransferEng/Waste Transfer Engineering/1 Transfers/1C - Procedure Review Tools/MasterProcedureData.xlsx'
     global components
@@ -117,8 +121,8 @@ def main():
     current_dir = os.path.dirname(__file__)
     logo_path = os.path.join(current_dir, "utils", "WRPS-new-logo.png")
     logo = tk.PhotoImage(file=logo_path)
-    logo_small = logo.subsample(20,20)
-    logo_label = tk.Label(window, image = logo_small)
+    logo_small = logo.subsample(10,10)
+    logo_label = ttk.Label(window, image = logo_small)
     logo_label.grid(row= row_index, column = 0, sticky= "w", padx= 15)
     row_index += 1
     sep = tk.ttk.Separator(window, orient='horizontal')
@@ -129,10 +133,10 @@ def main():
     global header_message 
     header_message = tk.StringVar()
     header_message.set("Using data from: "+ file_path)
-    label3 = tk.Label(window, textvariable = header_message, wraplength=500, anchor="w", justify= "left")
-    label3.grid(row = row_index, columnspan=3, rowspan=1, padx=15, pady=2,sticky = "w")
-    file_button = tk.Button(window, text= "Or use a different file", command=lambda: load_new_file(), relief="raised")
-    file_button.grid(row = row_index, column = 3, padx= 15)
+    label3 = ttk.Label(window, textvariable = header_message, wraplength=500, anchor="w", justify= "left")
+    label3.grid(row = row_index, columnspan=3, rowspan=1, padx=15, pady=10,sticky = "w")
+    file_button = ttk.Button(window, text= "Or use a different file", command=lambda: load_new_file())
+    file_button.grid(row = row_index, column = 3, padx= 15, pady=10)
     row_index += 1
     sep = tk.ttk.Separator(window, orient='horizontal')
     sep.grid(row = row_index, column = 0,sticky="ew", columnspan = 4)
@@ -140,46 +144,47 @@ def main():
     #######################################################################################################################
     global show_all
     show_all = tk.BooleanVar(value=False)
-    checkbox = tk.Checkbutton(window, text="Make all components available for selection (valves, nozzles, etc)", variable=show_all, command = toggle_boolean, anchor = "w")
+    # checkbox = ttk.Checkbutton(window, text="Make all components available for selection (valves, nozzles, etc)", variable=show_all, command = toggle_boolean, anchor = "w")
+    checkbox = ttk.Checkbutton(window, text="Make all components available for selection (valves, nozzles, etc)", variable=show_all, command = toggle_boolean)
     checkbox.grid(row=row_index, column=0, padx=15, sticky="w")
 
     row_index += 1
     #######################################################################################################################
-    label0 = tk.Label(window, text="1. Select source tank (eg. PUMP):")
+    label0 = ttk.Label(window, text="1. Select source tank (eg. PUMP):")
     label0.grid(row=row_index, column= 0, pady = 2, padx=15,sticky = "w")
     global src_entry
     s = tk.StringVar(window, value= "AP01A-")
-    src_entry = tk.Entry(window, textvariable=s)
+    src_entry = ttk.Entry(window, textvariable=s)
     src_entry.grid(row=row_index, column= 2, pady=5, padx=15, sticky="w")
     global source
     source = tk.StringVar(window)
     source.set(value="AP03A-PUMP")
     global src_dropdown
-    src_dropdown = tk.OptionMenu(window, source, *displayed_nodes)
+    src_dropdown = ttk.OptionMenu(window, source, *displayed_nodes)
     src_dropdown.grid(row=row_index, column= 3, pady=2, padx=15, sticky="w")
 
     row_index += 1
     #######################################################################################################################
-    label1 = tk.Label(window, text="2. Select receiving tank (eg. TKR):")
+    label1 = ttk.Label(window, text="2. Select receiving tank (eg. TKR):")
     label1.grid(row=row_index, column= 0, pady = 2, padx=15, sticky = "w")
     global dst_entry
-    dst_entry = tk.Entry(window)
+    dst_entry = ttk.Entry(window)
     dst_entry.grid(row=row_index, column= 2, pady=15, padx=15, sticky="w")
     global destination
     destination = tk.StringVar(window)
     destination.set(value="AY01A-TKR-D")
     global dst_dropdown
-    dst_dropdown = tk.OptionMenu(window, destination, *displayed_nodes, )
+    dst_dropdown = ttk.OptionMenu(window, destination, *displayed_nodes)
     dst_dropdown.grid(row=row_index, column= 3, pady=2, padx=15, sticky="w")
 
     row_index += 1
     #######################################################################################################################
-    find_routes_button = tk.Button(window, text="3. Generate route options", command=lambda: create_route_options(), relief="raised")
+    find_routes_button = ttk.Button(window, text="3. Generate route options", command=lambda: create_route_options())
     find_routes_button.grid(row=row_index, column= 0, padx=13, pady=10, sticky= "w")
-    label2 = tk.Label(window, text="Number of route alternatives (optional):")
+    label2 = ttk.Label(window, text="Alternatives needed (optional):")
     label2.grid(row=row_index, column= 2, padx=6, sticky= 'e')
     global alternatives 
-    alternatives = tk.Entry(window, width= 7, relief="raised")
+    alternatives = ttk.Entry(window, width= 7)
     alternatives.insert(0, "1") 
     alternatives.grid(row=row_index, column= 3, padx=15, sticky='w')
 
@@ -189,7 +194,7 @@ def main():
 
     row_index += 1
     #######################################################################################################################
-    label3 = tk.Label(window, text="4. Click on a route option to preview graph")
+    label3 = ttk.Label(window, text="4. Click on a route option to preview graph")
     label3.grid(row=row_index, column= 0, padx=15, sticky= "w")
     global listbox
     global listbox_index
@@ -202,14 +207,14 @@ def main():
     global graphing_algorithm 
     graphing_algorithm = tk.StringVar(window)
     graphing_algorithm.set(value="Zig-zag")
-    label4 = tk.Label(window, text="Graph style (optional): ")
+    label4 = ttk.Label(window, text="Graph style (optional): ")
     label4.grid(row=row_index, column= 0, padx=18, sticky= "w")
-    algorithm_dropdown = tk.OptionMenu(window, graphing_algorithm, "Zig-zag", "Pyramid", "Arch")
+    algorithm_dropdown = ttk.OptionMenu(window, graphing_algorithm, "Zig-zag", "Pyramid", "Arch")
     algorithm_dropdown.grid(row=row_index, column= 0, columnspan=1, padx=20 )
     
     row_index += 1
     #######################################################################################################################
-    make_document_button = tk.Button(window, text="5. Generate procedure development doc", command=lambda: make_doc(), relief="raised")
+    make_document_button = ttk.Button(window, text="5. Generate procedure development doc", command=lambda: make_doc())
     make_document_button.grid(row=row_index, column= 0, padx = 13, pady=15, sticky="w")
     
     listbox.bind("<<ListboxSelect>>", preview_graph)
